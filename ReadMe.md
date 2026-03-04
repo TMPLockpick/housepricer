@@ -17,7 +17,7 @@ All market estimates are compiled and cross-referenced from the most trusted pro
 - 📈 Year-on-year market trend indicators
 - 📊 Full stats: price range, price per m², market status
 - ⚡ Instant results with a clean, professional UI
-- 🔒 One-time payment via Stripe — no subscriptions, ever
+- 🔒 One-time payment via Stripe — no subscriptions, ever (Currently its free!)
 
 ## Tech Stack
 
