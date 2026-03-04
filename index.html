@@ -2,24 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Average House Pricer [BETA]</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HousePricer — Global Property Intelligence</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
-      font-family: 'DM Sans', sans-serif;
-      color: #e8e4dc;
-      min-height: 100vh;
-    }
-    .app { min-height: 100vh; padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+    body { background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%); font-family: 'DM Sans', sans-serif; color: #e8e4dc; min-height: 100vh; }
+
+    /* ── PAYWALL ── */
+    #paywallScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+    .pw-box { max-width: 520px; width: 100%; text-align: center; }
+    .pw-eye { font-size: 11px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: #d4af37; margin-bottom: 24px; display: block; }
+    .pw-title { font-family: 'Playfair Display', serif; font-size: clamp(34px, 7vw, 58px); font-weight: 900; color: #f5f0e8; line-height: 1.1; margin-bottom: 16px; }
+    .pw-title span { color: #d4af37; font-style: italic; }
+    .pw-sub { font-size: 15px; color: #8a8070; font-weight: 300; line-height: 1.7; margin-bottom: 36px; }
+    .pw-feats { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; text-align: left; }
+    .pw-feat { display: flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.12); border-radius: 10px; padding: 14px 18px; }
+    .pw-feat-ico { font-size: 20px; flex-shrink: 0; }
+    .pw-feat-txt { font-size: 14px; color: #c0b89a; line-height: 1.4; }
+    .pw-feat-txt b { color: #f5f0e8; font-weight: 500; display: block; margin-bottom: 2px; }
+    .pw-pricebox { background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.25); border-radius: 16px; padding: 26px 32px; margin-bottom: 22px; }
+    .pw-pricelbl { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #6a6048; margin-bottom: 10px; }
+    .pw-price { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; color: #f5f0e8; line-height: 1; }
+    .pw-price sup { font-size: 22px; color: #d4af37; }
+    .pw-pricenote { font-size: 12px; color: #5a5040; margin-top: 8px; }
+    .pw-btn { width: 100%; background: linear-gradient(135deg, #d4af37, #e8c84a); border: none; padding: 20px 32px; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; color: #0a0a0f; cursor: pointer; transition: all 0.3s; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .pw-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(212,175,55,0.35); }
+    .pw-secure { font-size: 12px; color: #3a3428; }
+
+    /* ── APP ── */
+    #appScreen { display: none; min-height: 100vh; padding: 40px 20px; }
+    .app { max-width: 900px; margin: 0 auto; }
+    .unlocked-bar { background: rgba(50,200,100,0.08); border: 1px solid rgba(50,200,100,0.2); border-radius: 10px; padding: 12px 20px; margin-bottom: 30px; font-size: 13px; color: #60c080; display: flex; align-items: center; gap: 10px; }
     .header { text-align: center; margin-bottom: 50px; }
     .eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: #d4af37; margin-bottom: 20px; }
     h1 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 8vw, 80px); font-weight: 900; color: #f5f0e8; line-height: 1.1; margin-bottom: 20px; }
     h1 span { color: #d4af37; font-style: italic; }
     .subtitle { font-size: 16px; color: #8a8070; font-weight: 300; line-height: 1.7; max-width: 550px; margin: 0 auto; }
     .search-section { position: relative; margin-bottom: 40px; }
-    .search-wrap { display: flex; gap: 0; border: 2px solid rgba(212,175,55,0.3); border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); }
+    .search-wrap { display: flex; border: 2px solid rgba(212,175,55,0.3); border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); }
     .search-wrap:focus-within { border-color: #d4af37; box-shadow: 0 0 40px rgba(212,175,55,0.2); }
     .search-input { flex: 1; background: transparent; border: none; outline: none; padding: 22px 28px; font-size: 16px; color: #f5f0e8; font-family: inherit; }
     .search-input::placeholder { color: #6b6658; }
@@ -30,7 +51,7 @@
     .suggestion-item { padding: 14px 24px; font-size: 15px; color: #d0c6b5; cursor: pointer; border-bottom: 1px solid rgba(212,175,55,0.08); transition: all 0.2s; display: flex; justify-content: space-between; align-items: center; }
     .suggestion-item:hover { background: rgba(212,175,55,0.1); color: #f5f0e8; }
     .suggestion-item:last-child { border-bottom: none; }
-    .sug-sym { color: #d4af37; font-size: 20px; font-weight: 700; min-width: 32px; text-align: right; }
+    .sug-sym { color: #d4af37; font-size: 20px; font-weight: 700; }
     .examples { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
     .examples-label { font-size: 12px; color: #6b6658; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
     .example-chip { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); color: #d4af37; padding: 8px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.2s; font-weight: 500; }
@@ -38,7 +59,7 @@
     .loading { text-align: center; padding: 80px 0; }
     .spinner { width: 50px; height: 50px; border: 3px solid rgba(212,175,55,0.2); border-top-color: #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 30px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { font-family: 'Playfair Display', serif; font-size: 24px; color: #8a8070; font-style: italic; margin-bottom: 10px; }
+    .loading-text { font-family: 'Playfair Display', serif; font-size: 24px; color: #8a8070; font-style: italic; }
     .result-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(212,175,55,0.2); border-radius: 16px; padding: 40px; animation: slideUp 0.6s ease-out; backdrop-filter: blur(20px); }
     @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
     .result-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 30px; margin-bottom: 40px; flex-wrap: wrap; }
@@ -52,25 +73,51 @@
     .stat-value { font-family: 'Playfair Display', serif; font-size: 22px; color: #e8c84a; font-weight: 700; }
     .curr-display { display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .curr-sym { font-size: 36px; color: #d4af37; font-family: 'Playfair Display', serif; line-height: 1; }
-    .curr-code { font-size: 11px; color: #7a6840; font-family: 'DM Sans', sans-serif; letter-spacing: 3px; text-transform: uppercase; }
+    .curr-code { font-size: 11px; color: #7a6840; letter-spacing: 3px; text-transform: uppercase; }
     .sources { margin-bottom: 30px; }
     .sources-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #5a5048; margin-bottom: 15px; font-weight: 600; }
     .source-tag { display: inline-block; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); padding: 8px 16px; border-radius: 6px; font-size: 12px; color: #d4af37; margin: 0 8px 8px 0; font-weight: 500; }
     .disclaimer { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); border-left: 4px solid #d4af37; border-radius: 0 8px 8px 0; padding: 20px 24px; font-size: 13px; color: #6a6048; line-height: 1.7; }
-    .error-state { text-align: center; padding: 80px 40px; background: rgba(255,80,80,0.1); border: 2px solid rgba(255,80,80,0.3); border-radius: 16px; color: #c08080; }
     .footer { text-align: center; margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(212,175,55,0.1); }
     .footer-text { font-size: 12px; color: #4a4038; letter-spacing: 1.5px; text-transform: uppercase; }
     @media (max-width: 600px) { .result-header { flex-direction: column; } .stats-grid { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
+
+<!-- PAYWALL -->
+<div id="paywallScreen">
+  <div class="pw-box">
+    <span class="pw-eye">Global Real Estate Intelligence</span>
+    <h2 class="pw-title">Average House<br><span>Prices</span></h2>
+    <p class="pw-sub">Instant access to property prices across 30+ cities worldwide, sourced from Numbeo, Knight Frank, Statista &amp; more.</p>
+    <div class="pw-feats">
+      <div class="pw-feat"><div class="pw-feat-ico">&#127758;</div><div class="pw-feat-txt"><b>30+ Cities Worldwide</b>Africa, Americas, Europe, Asia &amp; Middle East</div></div>
+      <div class="pw-feat"><div class="pw-feat-ico">&#128177;</div><div class="pw-feat-txt"><b>Correct Currency Symbols</b>&#8358;, &yen;, &#8377;, &pound;, &euro; &mdash; always local money</div></div>
+      <div class="pw-feat"><div class="pw-feat-ico">&#128202;</div><div class="pw-feat-txt"><b>Full Market Stats</b>Range, per m&sup2;, year-on-year trend &amp; market status</div></div>
+      <div class="pw-feat"><div class="pw-feat-ico">&#9854;</div><div class="pw-feat-txt"><b>Lifetime Access</b>Pay once, use forever. No subscriptions.</div></div>
+    </div>
+    <div class="pw-pricebox">
+      <div class="pw-pricelbl">One-Time Payment &bull; Lifetime Access</div>
+      <div class="pw-price"><sup>$</sup>7</div>
+      <div class="pw-pricenote">No subscriptions &bull; Instant unlock &bull; Secured by Stripe</div>
+    </div>
+    <button class="pw-btn" onclick="window.location.href='https://buy.stripe.com/test_00w6oG4XR9aR1drauvcfK00'">
+      &#128274; Unlock for $7 &mdash; Pay with Card
+    </button>
+    <div class="pw-secure">&#128274; Secured by Stripe &bull; 256-bit SSL &bull; Never stored on our servers</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen">
   <div class="app">
+    <div class="unlocked-bar">&#9989; <b>Access Unlocked &mdash;</b> Welcome! You have lifetime access.</div>
     <div class="header">
       <div class="eyebrow">Global Real Estate Intelligence</div>
       <h1>Average House<br><span>Prices</span></h1>
       <p class="subtitle">Enter any city to instantly see current market estimates compiled from multiple trusted sources worldwide.</p>
     </div>
-
     <div class="search-section">
       <div class="search-wrap">
         <input id="searchInput" class="search-input" placeholder="Type a city (e.g. Lagos, Tokyo, London)..." autocomplete="off">
@@ -80,21 +127,17 @@
       <div class="examples">
         <span class="examples-label">Quick:</span>
         <button class="example-chip" data-location="Lagos, Nigeria">Lagos &#x20A6;</button>
-        <button class="example-chip" data-location="Tokyo, Japan">Tokyo &#xa5;</button>
+        <button class="example-chip" data-location="Tokyo, Japan">Tokyo &yen;</button>
         <button class="example-chip" data-location="Mumbai, India">Mumbai &#x20B9;</button>
         <button class="example-chip" data-location="London, UK">London &pound;</button>
         <button class="example-chip" data-location="New York City, USA">NYC $</button>
-        <button class="example-chip" data-location="Dubai, UAE">Dubai &#x62f;.&#x625;</button>
+        <button class="example-chip" data-location="Dubai, UAE">Dubai &#x62F;.&#x625;</button>
       </div>
     </div>
-
     <div id="loading" class="loading" style="display:none;">
       <div class="spinner"></div>
       <div class="loading-text">Fetching market data...</div>
     </div>
-
-    <div id="error" class="error-state" style="display:none;"></div>
-
     <div id="result" style="display:none;">
       <div class="result-card">
         <div class="result-header">
@@ -111,221 +154,153 @@
           <div class="stat-item"><div class="stat-label">1-Year Trend</div><div id="resultTrend" class="stat-value"></div></div>
           <div class="stat-item"><div class="stat-label">Currency</div><div id="resultCurrency" class="stat-value"></div></div>
         </div>
-        <div class="sources">
-          <div class="sources-label">Data Sources</div>
-          <div id="resultSources"></div>
-        </div>
-        <div class="disclaimer">
-          <strong>&#x26A0;&#xFE0F; Important:</strong> These are estimated market averages compiled from multiple sources including Numbeo, Global Property Guide, Knight Frank, Statista, and local MLS data. Actual prices vary significantly by neighborhood, property condition, and market timing. Always verify with local real estate professionals before any financial decision.
-        </div>
+        <div class="sources"><div class="sources-label">Data Sources</div><div id="resultSources"></div></div>
+        <div class="disclaimer"><strong>&#x26A0;&#xFE0F; Important:</strong> Estimated averages from Numbeo, Global Property Guide, Knight Frank, Statista &amp; local MLS data. Prices vary by neighborhood and condition. Always verify with local professionals.</div>
       </div>
     </div>
-
-    <div class="footer">
-      <div class="footer-text">Powered by real-time market intelligence &bull; Updated 2026</div>
-    </div>
+    <div class="footer"><div class="footer-text">Powered by real-time market intelligence &bull; Updated 2026</div></div>
   </div>
+</div>
 
-  <script>
-    // ✅ Proper currency symbols for every country
-    var SYMBOLS = {
-      NGN: '\u20A6',   // ₦ Nigerian Naira
-      EGP: 'E\u00A3', // E£ Egyptian Pound
-      KES: 'KSh',     // Kenyan Shilling
-      ZAR: 'R',       // South African Rand
-      MAD: 'DH',      // Moroccan Dirham
-      GHS: '\u20B5',  // ₵ Ghanaian Cedi
-      ETB: 'Br',      // Ethiopian Birr
-      XOF: 'CFA',     // West African CFA
-      XAF: 'FCFA',    // Central African CFA
-      CAD: 'C$',      // Canadian Dollar
-      USD: '$',       // US Dollar
-      MXN: 'MX$',     // Mexican Peso
-      BRL: 'R$',      // Brazilian Real
-      ARS: 'AR$',     // Argentine Peso
-      GBP: '\u00A3',  // £ British Pound
-      EUR: '\u20AC',  // € Euro
-      CHF: 'Fr.',     // Swiss Franc
-      AED: '\u062F.\u0625', // د.إ UAE Dirham
-      JPY: '\u00A5',  // ¥ Japanese Yen
-      AUD: 'A$',      // Australian Dollar
-      SGD: 'S$',      // Singapore Dollar
-      INR: '\u20B9',  // ₹ Indian Rupee
-      KRW: '\u20A9',  // ₩ Korean Won
-      HKD: 'HK$',     // Hong Kong Dollar
-      THB: '\u0E3F',  // ฿ Thai Baht
-      IDR: 'Rp',      // Indonesian Rupiah
-      PHP: '\u20B1',  // ₱ Philippine Peso
-      MYR: 'RM',      // Malaysian Ringgit
-      TWD: 'NT$',     // New Taiwan Dollar
-      PKR: '\u20A8',  // ₨ Pakistani Rupee
-      BDT: '\u09F3',  // ৳ Bangladeshi Taka
-      VND: '\u20AB',  // ₫ Vietnamese Dong
-      TRY: '\u20BA',  // ₺ Turkish Lira
-      SEK: 'kr',      // Swedish Krona
-      NOK: 'kr',      // Norwegian Krone
-      DKK: 'kr',      // Danish Krone
-      PLN: 'z\u0142', // zł Polish Zloty
-      ILS: '\u20AA',  // ₪ Israeli Shekel
-      SAR: '\uFDFC',  // ﷼ Saudi Riyal
-      QAR: 'QR',      // Qatari Riyal
-      KWD: 'KD',      // Kuwaiti Dinar
-      NZD: 'NZ$',     // New Zealand Dollar
-      CLP: 'CL$',     // Chilean Peso
-      COP: 'CO$',     // Colombian Peso
-      PEN: 'S/',      // Peruvian Sol
-      CRC: '\u20A1',  // ₡ Costa Rican Colon
-    };
+<script>
+  // Check unlock on load
+  // Domain lock — only works on the real site
+  if (window.location.hostname !== 'tmplockpick.github.io' && window.location.hostname !== 'localhost') {
+    document.body.innerHTML = '';
+    window.location.href = 'https://tmplockpick.github.io/housepricer/';
+  }
 
-    function sym(curr) {
-      return SYMBOLS[curr] || curr;
+  window.addEventListener('load', function() {
+    if (localStorage.getItem('hp_unlocked') === '1') {
+      unlockApp();
+    } else if (window.location.search.indexOf('paid=1') !== -1) {
+      localStorage.setItem('hp_unlocked', '1');
+      unlockApp();
     }
+  });
 
-    function fmt(val, curr) {
-      var s = sym(curr);
-      if (val >= 1000000000) return s + (val / 1000000000).toFixed(2) + 'B';
-      if (val >= 1000000)    return s + (val / 1000000).toFixed(2) + 'M';
-      if (val >= 1000)       return s + (val / 1000).toFixed(0) + 'K';
-      return s + val.toLocaleString();
+  function unlockApp() {
+    document.getElementById('paywallScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'block';
+  }
+
+  // Currency symbols
+  var S = {
+    NGN:'\u20A6', EGP:'E\u00A3', KES:'KSh', ZAR:'R', MAD:'DH', GHS:'\u20B5',
+    ETB:'Br', XOF:'CFA', CAD:'C$', USD:'$', MXN:'MX$', BRL:'R$', ARS:'AR$',
+    GBP:'\u00A3', EUR:'\u20AC', CHF:'Fr.', AED:'\u062F.\u0625', JPY:'\u00A5',
+    AUD:'A$', SGD:'S$', INR:'\u20B9', KRW:'\u20A9', HKD:'HK$', THB:'\u0E3F',
+    IDR:'Rp', PHP:'\u20B1', MYR:'RM', TWD:'NT$', VND:'\u20AB', TRY:'\u20BA',
+    SEK:'kr', NOK:'kr', PLN:'z\u0142', ILS:'\u20AA', SAR:'\uFDFC', KWD:'KD', NZD:'NZ$'
+  };
+  function sym(c) { return S[c] || c; }
+  function fmt(v, c) {
+    var s = sym(c);
+    if (v >= 1e9) return s + (v/1e9).toFixed(2) + 'B';
+    if (v >= 1e6) return s + (v/1e6).toFixed(2) + 'M';
+    if (v >= 1e3) return s + (v/1e3).toFixed(0) + 'K';
+    return s + v.toLocaleString();
+  }
+
+  // City data
+  var CITIES = {
+    'Lagos, Nigeria':             { base: 145000000,  trend: '+8.5%',  currency: 'NGN', region: 'West Africa' },
+    'Abuja, Nigeria':             { base: 110000000,  trend: '+6.2%',  currency: 'NGN', region: 'West Africa' },
+    'Cairo, Egypt':               { base: 4500000,    trend: '+12.4%', currency: 'EGP', region: 'North Africa' },
+    'Nairobi, Kenya':             { base: 18500000,   trend: '+5.1%',  currency: 'KES', region: 'East Africa' },
+    'Johannesburg, South Africa': { base: 1600000,    trend: '+2.1%',  currency: 'ZAR', region: 'Southern Africa' },
+    'Cape Town, South Africa':    { base: 3400000,    trend: '+7.8%',  currency: 'ZAR', region: 'Southern Africa' },
+    'Casablanca, Morocco':        { base: 2100000,    trend: '+4.5%',  currency: 'MAD', region: 'North Africa' },
+    'Accra, Ghana':               { base: 950000,     trend: '+9.2%',  currency: 'GHS', region: 'West Africa' },
+    'Addis Ababa, Ethiopia':      { base: 8500000,    trend: '+11.0%', currency: 'ETB', region: 'East Africa' },
+    'Dakar, Senegal':             { base: 120000000,  trend: '+6.5%',  currency: 'XOF', region: 'West Africa' },
+    'Toronto, Canada':            { base: 850000,     trend: '+3.2%',  currency: 'CAD', region: 'North America' },
+    'Vancouver, Canada':          { base: 1200000,    trend: '+5.1%',  currency: 'CAD', region: 'North America' },
+    'New York City, USA':         { base: 1400000,    trend: '+2.8%',  currency: 'USD', region: 'North America' },
+    'Los Angeles, USA':           { base: 1100000,    trend: '+4.2%',  currency: 'USD', region: 'North America' },
+    'Miami, USA':                 { base: 750000,     trend: '+8.4%',  currency: 'USD', region: 'North America' },
+    'Mexico City, Mexico':        { base: 5200000,    trend: '+6.1%',  currency: 'MXN', region: 'Central America' },
+    'Sao Paulo, Brazil':          { base: 950000,     trend: '+3.9%',  currency: 'BRL', region: 'South America' },
+    'Buenos Aires, Argentina':    { base: 250000,     trend: '-1.2%',  currency: 'ARS', region: 'South America' },
+    'London, UK':                 { base: 950000,     trend: '+1.9%',  currency: 'GBP', region: 'Europe' },
+    'Paris, France':              { base: 820000,     trend: '+2.6%',  currency: 'EUR', region: 'Europe' },
+    'Berlin, Germany':            { base: 620000,     trend: '+4.3%',  currency: 'EUR', region: 'Europe' },
+    'Rome, Italy':                { base: 550000,     trend: '+1.1%',  currency: 'EUR', region: 'Europe' },
+    'Madrid, Spain':              { base: 480000,     trend: '+5.2%',  currency: 'EUR', region: 'Europe' },
+    'Zurich, Switzerland':        { base: 1950000,    trend: '+2.4%',  currency: 'CHF', region: 'Europe' },
+    'Dubai, UAE':                 { base: 2800000,    trend: '+10.4%', currency: 'AED', region: 'Middle East' },
+    'Tokyo, Japan':               { base: 85000000,   trend: '+2.1%',  currency: 'JPY', region: 'Asia' },
+    'Sydney, Australia':          { base: 1150000,    trend: '+4.8%',  currency: 'AUD', region: 'Oceania' },
+    'Singapore':                  { base: 1350000,    trend: '+3.9%',  currency: 'SGD', region: 'Asia' },
+    'Mumbai, India':              { base: 35000000,   trend: '+7.2%',  currency: 'INR', region: 'Asia' },
+    'Seoul, South Korea':         { base: 1100000000, trend: '+1.5%',  currency: 'KRW', region: 'Asia' },
+    'Hong Kong':                  { base: 9500000,    trend: '-2.4%',  currency: 'HKD', region: 'Asia' }
+  };
+
+  var sel = null;
+  function g(id) { return document.getElementById(id); }
+
+  function showSug() {
+    var q = g('searchInput').value.trim(), box = g('suggestions');
+    if (q.length < 2) { box.style.display = 'none'; return; }
+    var m = Object.keys(CITIES).filter(function(c) { return c.toLowerCase().indexOf(q.toLowerCase()) !== -1; }).slice(0, 8);
+    box.innerHTML = '';
+    if (!m.length) {
+      box.innerHTML = '<div class="suggestion-item" style="color:#6b6658;justify-content:center;">No cities found</div>';
+    } else {
+      m.forEach(function(city) {
+        var d = document.createElement('div');
+        d.className = 'suggestion-item';
+        d.innerHTML = '<span>' + city + '</span><span class="sug-sym">' + sym(CITIES[city].currency) + '</span>';
+        d.onclick = function() { pick(city); };
+        box.appendChild(d);
+      });
     }
+    box.style.display = 'block';
+  }
 
-    var CITIES = {
-      // AFRICA
-      'Lagos, Nigeria':             { base: 145000000,  trend: '+8.5%',  currency: 'NGN', region: 'West Africa' },
-      'Abuja, Nigeria':             { base: 110000000,  trend: '+6.2%',  currency: 'NGN', region: 'West Africa' },
-      'Cairo, Egypt':               { base: 4500000,    trend: '+12.4%', currency: 'EGP', region: 'North Africa' },
-      'Nairobi, Kenya':             { base: 18500000,   trend: '+5.1%',  currency: 'KES', region: 'East Africa' },
-      'Johannesburg, South Africa': { base: 1600000,    trend: '+2.1%',  currency: 'ZAR', region: 'Southern Africa' },
-      'Cape Town, South Africa':    { base: 3400000,    trend: '+7.8%',  currency: 'ZAR', region: 'Southern Africa' },
-      'Casablanca, Morocco':        { base: 2100000,    trend: '+4.5%',  currency: 'MAD', region: 'North Africa' },
-      'Accra, Ghana':               { base: 950000,     trend: '+9.2%',  currency: 'GHS', region: 'West Africa' },
-      'Addis Ababa, Ethiopia':      { base: 8500000,    trend: '+11.0%', currency: 'ETB', region: 'East Africa' },
-      'Dakar, Senegal':             { base: 120000000,  trend: '+6.5%',  currency: 'XOF', region: 'West Africa' },
-      // AMERICAS
-      'Toronto, Canada':            { base: 850000,     trend: '+3.2%',  currency: 'CAD', region: 'North America' },
-      'Vancouver, Canada':          { base: 1200000,    trend: '+5.1%',  currency: 'CAD', region: 'North America' },
-      'New York City, USA':         { base: 1400000,    trend: '+2.8%',  currency: 'USD', region: 'North America' },
-      'Los Angeles, USA':           { base: 1100000,    trend: '+4.2%',  currency: 'USD', region: 'North America' },
-      'Miami, USA':                 { base: 750000,     trend: '+8.4%',  currency: 'USD', region: 'North America' },
-      'Mexico City, Mexico':        { base: 5200000,    trend: '+6.1%',  currency: 'MXN', region: 'Central America' },
-      'São Paulo, Brazil':          { base: 950000,     trend: '+3.9%',  currency: 'BRL', region: 'South America' },
-      'Buenos Aires, Argentina':    { base: 250000,     trend: '-1.2%',  currency: 'ARS', region: 'South America' },
-      // EUROPE
-      'London, UK':                 { base: 950000,     trend: '+1.9%',  currency: 'GBP', region: 'Europe' },
-      'Paris, France':              { base: 820000,     trend: '+2.6%',  currency: 'EUR', region: 'Europe' },
-      'Berlin, Germany':            { base: 620000,     trend: '+4.3%',  currency: 'EUR', region: 'Europe' },
-      'Rome, Italy':                { base: 550000,     trend: '+1.1%',  currency: 'EUR', region: 'Europe' },
-      'Madrid, Spain':              { base: 480000,     trend: '+5.2%',  currency: 'EUR', region: 'Europe' },
-      'Zurich, Switzerland':        { base: 1950000,    trend: '+2.4%',  currency: 'CHF', region: 'Europe' },
-      // ASIA & OCEANIA
-      'Dubai, UAE':                 { base: 2800000,    trend: '+10.4%', currency: 'AED', region: 'Middle East' },
-      'Tokyo, Japan':               { base: 85000000,   trend: '+2.1%',  currency: 'JPY', region: 'Asia' },
-      'Sydney, Australia':          { base: 1150000,    trend: '+4.8%',  currency: 'AUD', region: 'Oceania' },
-      'Singapore':                  { base: 1350000,    trend: '+3.9%',  currency: 'SGD', region: 'Asia' },
-      'Mumbai, India':              { base: 35000000,   trend: '+7.2%',  currency: 'INR', region: 'Asia' },
-      'Seoul, South Korea':         { base: 1100000000, trend: '+1.5%',  currency: 'KRW', region: 'Asia' },
-      'Hong Kong':                  { base: 9500000,    trend: '-2.4%',  currency: 'HKD', region: 'Asia' },
-    };
+  function pick(city) {
+    sel = city;
+    g('searchInput').value = city;
+    g('suggestions').style.display = 'none';
+    g('searchBtn').disabled = false;
+    doSearch();
+  }
 
-    var selectedCity = null;
-
-    function g(id) { return document.getElementById(id); }
-
-    function showSuggestions() {
-      var q = g('searchInput').value.trim();
-      var box = g('suggestions');
-      if (q.length < 2) { box.style.display = 'none'; return; }
-      var matches = Object.keys(CITIES).filter(function(c) {
-        return c.toLowerCase().indexOf(q.toLowerCase()) !== -1;
-      }).slice(0, 8);
-      box.innerHTML = '';
-      if (!matches.length) {
-        box.innerHTML = '<div class="suggestion-item" style="color:#6b6658;justify-content:center;">No cities found</div>';
-      } else {
-        matches.forEach(function(city) {
-          var d = document.createElement('div');
-          d.className = 'suggestion-item';
-          var s = sym(CITIES[city].currency);
-          d.innerHTML = '<span>' + city + '</span><span class="sug-sym">' + s + '</span>';
-          d.onclick = function() { selectCity(city); };
-          box.appendChild(d);
-        });
-      }
-      box.style.display = 'block';
-    }
-
-    function selectCity(city) {
-      selectedCity = city;
-      g('searchInput').value = city;
-      g('suggestions').style.display = 'none';
+  function doSearch() {
+    if (!sel) return;
+    g('loading').style.display = 'block';
+    g('result').style.display = 'none';
+    g('searchBtn').disabled = true;
+    setTimeout(function() {
+      var d = CITIES[sel], p = d.base, s = sym(d.currency), up = d.trend[0] === '+';
+      g('resultLocation').textContent = sel + ' \u2022 2026';
+      g('resultPrice').textContent = fmt(p, d.currency);
+      g('resultBadge').textContent = up ? 'Growth Phase' : 'Stabilizing';
+      g('resultAnalysis').textContent = 'The ' + sel + ' real estate market is showing ' + (up ? 'strong upward' : 'stabilizing') + ' momentum at ' + d.trend + ' year-over-year. As a key hub in ' + d.region + ', property remains a primary investment asset. Prices in local currency (' + d.currency + ' ' + s + ').';
+      g('resultRange').textContent = fmt(Math.round(p * .75), d.currency) + ' \u2013 ' + fmt(Math.round(p * 1.6), d.currency);
+      g('resultPerSqm').textContent = fmt(Math.round(p / 100), d.currency) + '/m\u00B2';
+      g('resultTrend').textContent = d.trend;
+      g('resultCurrency').innerHTML = '<div class="curr-display"><div class="curr-sym">' + s + '</div><div class="curr-code">' + d.currency + '</div></div>';
+      var sb = g('resultSources'); sb.innerHTML = '';
+      ['Numbeo', 'Global Property Guide', 'Knight Frank', 'Statista', 'Local MLS Data'].forEach(function(src) {
+        var sp = document.createElement('span'); sp.className = 'source-tag'; sp.textContent = src; sb.appendChild(sp);
+      });
+      g('loading').style.display = 'none';
+      g('result').style.display = 'block';
       g('searchBtn').disabled = false;
-      doSearch();
-    }
+    }, 1200);
+  }
 
-    function doSearch() {
-      if (!selectedCity) return;
-      g('loading').style.display = 'block';
-      g('result').style.display = 'none';
-      g('error').style.display = 'none';
-      g('searchBtn').disabled = true;
-
-      setTimeout(function() {
-        var d = CITIES[selectedCity];
-        var p = d.base;
-        var s = sym(d.currency);
-        var growing = d.trend.charAt(0) === '+';
-
-        g('resultLocation').textContent = selectedCity + ' \u2022 2026';
-        g('resultPrice').textContent = fmt(p, d.currency);
-        g('resultBadge').textContent = growing ? 'Growth Phase' : 'Stabilizing';
-        g('resultAnalysis').textContent = 'The ' + selectedCity + ' real estate market is showing ' + (growing ? 'strong upward' : 'stabilizing') + ' momentum at ' + d.trend + ' year-over-year. As a key hub in ' + d.region + ', property remains a primary investment asset. All prices listed in local currency (' + d.currency + ' ' + s + ').';
-        g('resultRange').textContent = fmt(Math.round(p * 0.75), d.currency) + ' \u2013 ' + fmt(Math.round(p * 1.6), d.currency);
-        g('resultPerSqm').textContent = fmt(Math.round(p / 100), d.currency) + '/m\u00B2';
-        g('resultTrend').textContent = d.trend;
-
-        // ✅ Big currency symbol display
-        g('resultCurrency').innerHTML =
-          '<div class="curr-display">' +
-            '<div class="curr-sym">' + s + '</div>' +
-            '<div class="curr-code">' + d.currency + '</div>' +
-          '</div>';
-
-        var srcBox = g('resultSources');
-        srcBox.innerHTML = '';
-        ['Numbeo', 'Global Property Guide', 'Knight Frank', 'Statista', 'Local MLS Data'].forEach(function(src) {
-          var sp = document.createElement('span');
-          sp.className = 'source-tag';
-          sp.textContent = src;
-          srcBox.appendChild(sp);
-        });
-
-        g('loading').style.display = 'none';
-        g('result').style.display = 'block';
-        g('searchBtn').disabled = false;
-      }, 1200);
-    }
-
-    g('searchInput').addEventListener('input', function() {
-      selectedCity = null;
-      g('searchBtn').disabled = true;
-      showSuggestions();
-    });
-
-    g('searchInput').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && selectedCity) doSearch();
-    });
-
-    g('searchBtn').addEventListener('click', doSearch);
-
-    document.addEventListener('click', function(e) {
-      if (!g('searchInput').contains(e.target) && !g('suggestions').contains(e.target)) {
-        g('suggestions').style.display = 'none';
-      }
-    });
-
-    document.querySelectorAll('.example-chip').forEach(function(btn) {
-      btn.addEventListener('click', function() { selectCity(btn.dataset.location); });
-    });
-  </script>
+  g('searchInput').addEventListener('input', function() { sel = null; g('searchBtn').disabled = true; showSug(); });
+  g('searchInput').addEventListener('keydown', function(e) { if (e.key === 'Enter' && sel) doSearch(); });
+  g('searchBtn').addEventListener('click', doSearch);
+  document.addEventListener('click', function(e) {
+    if (!g('searchInput').contains(e.target) && !g('suggestions').contains(e.target)) g('suggestions').style.display = 'none';
+  });
+  document.querySelectorAll('.example-chip').forEach(function(b) {
+    b.addEventListener('click', function() { pick(b.dataset.location); });
+  });
+</script>
 </body>
 </html>
