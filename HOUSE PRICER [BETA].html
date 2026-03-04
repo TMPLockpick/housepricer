@@ -29,6 +29,19 @@
     .pw-btn { width: 100%; background: linear-gradient(135deg, #d4af37, #e8c84a); border: none; padding: 20px 32px; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: 1px; color: #0a0a0f; cursor: pointer; transition: all 0.3s; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .pw-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(212,175,55,0.35); }
     .pw-secure { font-size: 12px; color: #3a3428; }
+    .pw-code-section { margin-top: 24px; border-top: 1px solid rgba(212,175,55,0.1); padding-top: 20px; }
+    .pw-code-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #5a5040; margin-bottom: 10px; }
+    .pw-code-row { display: flex; gap: 8px; }
+    .pw-code-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: #f5f0e8; outline: none; text-transform: uppercase; letter-spacing: 2px; }
+    .pw-code-input:focus { border-color: rgba(212,175,55,0.6); }
+    .pw-code-input::placeholder { color: #3a3028; letter-spacing: 1px; text-transform: none; }
+    .pw-code-btn { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); color: #d4af37; padding: 12px 20px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .pw-code-btn:hover { background: rgba(212,175,55,0.25); }
+    .pw-code-err { font-size: 12px; color: #e06060; margin-top: 8px; min-height: 16px; }
+    .access-code-box { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 20px 24px; margin-top: 24px; text-align: center; }
+    .access-code-title { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #6a6048; margin-bottom: 10px; }
+    .access-code-value { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #d4af37; letter-spacing: 4px; margin-bottom: 8px; }
+    .access-code-note { font-size: 12px; color: #5a5040; line-height: 1.6; }
 
     /* ── APP ── */
     #appScreen { display: none; min-height: 100vh; padding: 40px 20px; }
@@ -106,6 +119,19 @@
       &#128274; Unlock for $7 &mdash; Pay with Card
     </button>
     <div class="pw-secure">&#128274; Secured by Stripe &bull; 256-bit SSL &bull; Never stored on our servers</div>
+    <div class="pw-code-section">
+      <div class="pw-code-label">Already paid? Enter your access code</div>
+      <div class="pw-code-row">
+        <input class="pw-code-input" id="codeInput" placeholder="e.g. HP-A3K9X2" maxlength="9">
+        <button class="pw-code-btn" onclick="checkCode()">Unlock</button>
+      </div>
+      <div class="pw-code-err" id="codeErr"></div>
+    </div>
+    <div class="access-code-box" id="accessCodeBox" style="display:none;">
+      <div class="access-code-title">&#127775; Your Personal Access Code</div>
+      <div class="access-code-value" id="accessCodeValue"></div>
+      <div class="access-code-note">Save this code! Use it to unlock HousePricer on any device, anytime.</div>
+    </div>
   </div>
 </div>
 
@@ -163,13 +189,74 @@
 </div>
 
 <script>
+  // Domain lock
+  if (window.location.hostname !== 'tmplockpick.github.io' && window.location.hostname !== 'localhost') {
+    document.body.innerHTML = '';
+    window.location.href = 'https://tmplockpick.github.io/housepricer/';
+  }
+
   // Check unlock on load
+  var SECRET = 'HP2026TMPLOCKPICK';
+  function generateCode(seed) {
+    var str = seed + SECRET;
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = ((hash << 5) - hash) + str.charCodeAt(i);
+      hash = hash & hash;
+    }
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var code = 'HP-';
+    var h = Math.abs(hash);
+    for (var j = 0; j < 6; j++) {
+      code += chars[h % chars.length];
+      h = Math.floor(h / chars.length) + (j * 7919);
+    }
+    return code;
+  }
+  function getValidCodes() {
+    var codes = [];
+    for (var d = 0; d < 730; d++) {
+      codes.push(generateCode('day' + d + 'housepricer'));
+    }
+    return codes;
+  }
+  function getTodayCode() {
+    var base = new Date('2026-01-01').getTime();
+    var day = Math.floor((new Date().getTime() - base) / (1000 * 60 * 60 * 24));
+    return generateCode('day' + day + 'housepricer');
+  }
+  function checkCode() {
+    var input = document.getElementById('codeInput').value.trim().toUpperCase();
+    var errEl = document.getElementById('codeErr');
+    if (!input) { errEl.textContent = 'Please enter your access code.'; return; }
+    if (getValidCodes().indexOf(input) !== -1) {
+      localStorage.setItem('hp_unlocked', '1');
+      errEl.textContent = '';
+      unlockApp();
+    } else {
+      errEl.textContent = 'Invalid code. Check your code and try again.';
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var inp = document.getElementById('codeInput');
+    if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') checkCode(); });
+  });
+
   window.addEventListener('load', function() {
     if (localStorage.getItem('hp_unlocked') === '1') {
       unlockApp();
     } else if (window.location.search.indexOf('paid=1') !== -1) {
       localStorage.setItem('hp_unlocked', '1');
-      unlockApp();
+      var code = getTodayCode();
+      var box = document.getElementById('accessCodeBox');
+      var val = document.getElementById('accessCodeValue');
+      if (box && val) {
+        val.textContent = code;
+        box.style.display = 'block';
+        setTimeout(unlockApp, 4000);
+      } else {
+        unlockApp();
+      }
     }
   });
 
