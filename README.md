@@ -32,5 +32,3 @@ HousePricer uses a one-time paywall model. Pay once, get lifetime access. No mon
 *Data is estimated and sourced from multiple public market intelligence platforms. Always verify with a local real estate professional before making financial decisions.*
 
 ---
-
-Paste that into your `README.md` on GitHub and it'll look super clean 🔥
