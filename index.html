@@ -39,10 +39,46 @@
     .pw-code-btn { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.3); color: #d4af37; padding: 12px 20px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .pw-code-btn:hover { background: rgba(212,175,55,0.25); }
     .pw-code-err { font-size: 12px; color: #e06060; margin-top: 8px; min-height: 16px; }
-    .access-code-box { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 20px 24px; margin-top: 24px; text-align: center; animation: slideUp 0.4s ease-out; }
-    .access-code-title { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #6a6048; margin-bottom: 10px; }
-    .access-code-value { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #d4af37; letter-spacing: 4px; margin-bottom: 8px; }
-    .access-code-note { font-size: 12px; color: #5a5040; line-height: 1.6; }
+    .access-code-box {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.97);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 40px 24px;
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .access-code-title { font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: #6a6048; margin-bottom: 24px; }
+    .access-code-value {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(48px, 12vw, 96px);
+      font-weight: 900;
+      color: #d4af37;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 60px rgba(212,175,55,0.4);
+      animation: codePulse 2s ease-in-out infinite;
+    }
+    @keyframes codePulse { 0%,100%{text-shadow:0 0 60px rgba(212,175,55,0.4)} 50%{text-shadow:0 0 100px rgba(212,175,55,0.8)} }
+    .access-code-note { font-size: 15px; color: #8a8070; line-height: 1.8; max-width: 480px; margin-bottom: 40px; }
+    .access-code-note strong { color: #f5f0e8; }
+    .access-code-ok {
+      background: linear-gradient(135deg, #d4af37, #e8c84a);
+      border: none;
+      padding: 16px 40px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #0a0a0f;
+      cursor: not-allowed;
+      opacity: 0.5;
+      transition: all 0.3s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .access-code-ok.ready { cursor: pointer; opacity: 1; }
+    .access-code-ok.ready:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(212,175,55,0.4); }
+    .code-countdown { font-size: 18px; font-weight: 700; font-family: 'Playfair Display', serif; min-width: 28px; }
 
     /* ── APP ── */
     #appScreen { display: none; min-height: 100vh; padding: 40px 20px; }
@@ -129,9 +165,15 @@
       <div class="pw-code-err" id="codeErr"></div>
     </div>
     <div class="access-code-box" id="accessCodeBox" style="display:none;">
-      <div class="access-code-title">&#127775; Your Personal Access Code</div>
+      <div class="access-code-title">&#127775; Your Personal Access Code &#127775;</div>
       <div class="access-code-value" id="accessCodeValue"></div>
-      <div class="access-code-note">Save this code! Use it to unlock HousePricer on any device, anytime &mdash; even if you clear your browser.</div>
+      <div class="access-code-note">
+        <strong>Save this code!</strong><br>
+        Use it to unlock HousePricer on any device, any browser, anytime &mdash; even if you clear your cache.
+      </div>
+      <button class="access-code-ok" id="accessCodeOkBtn" onclick="dismissCode()" disabled>
+        Got it &mdash; I saved my code &nbsp;<span class="code-countdown" id="codeCountdown">10</span>
+      </button>
     </div>
   </div>
 </div>
@@ -208,9 +250,19 @@
       var val = document.getElementById('accessCodeValue');
       if (box && val) {
         val.textContent = code;
-        box.style.display = 'block';
-        // Unlock after 4 seconds so they see the code
-        setTimeout(unlockApp, 4000);
+        box.style.display = 'flex';
+        // 10 second countdown then enable OK button
+        var secs = 10;
+        var btn = document.getElementById('accessCodeOkBtn');
+        var cdEl = document.getElementById('codeCountdown');
+        var interval = setInterval(function() {
+          secs--;
+          if (cdEl) cdEl.textContent = secs;
+          if (secs <= 0) {
+            clearInterval(interval);
+            if (btn) { btn.disabled = false; btn.classList.add('ready'); btn.innerHTML = 'Got it &mdash; I saved my code ✓'; }
+          }
+        }, 1000);
       } else {
         unlockApp();
       }
@@ -220,6 +272,12 @@
   function unlockApp() {
     document.getElementById('paywallScreen').style.display = 'none';
     document.getElementById('appScreen').style.display = 'block';
+  }
+
+  function dismissCode() {
+    var box = document.getElementById('accessCodeBox');
+    if (box) box.style.display = 'none';
+    unlockApp();
   }
 
   // ── Access Code System ──────────────────────────
