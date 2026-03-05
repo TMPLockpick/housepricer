@@ -1,6 +1,6 @@
 # HousePricer 🏠
 
-**HousePricer** is a real-time global property intelligence platform that gives instant access to average house prices across 30+ major cities worldwide. Designed for investors, researchers, expats, digital nomads, and anyone curious about the global real estate market — HousePricer delivers accurate, up-to-date market estimates all in one place.
+**HousePricer** is a real-time global property intelligence platform that gives instant access to average house prices across **120+ major cities worldwide**. Designed for investors, researchers, expats, digital nomads, and anyone curious about the global real estate market — HousePricer delivers accurate, up-to-date market estimates all in one place.
 
 ## What Makes It Different
 
@@ -12,12 +12,14 @@ All market estimates are compiled and cross-referenced from the most trusted pro
 
 ## Features
 
-- 🌍 30+ cities across Africa, Americas, Europe, Asia & the Middle East
+- 🌍 120+ cities across Africa, Americas, Europe, Asia & the Middle East
 - 💱 Prices displayed in correct local currency symbols
 - 📈 Year-on-year market trend indicators
 - 📊 Full stats: price range, price per m², market status
 - ⚡ Instant results with a clean, professional UI
-- 🔒 One-time payment via Stripe — no subscriptions, ever (Currently its free!)
+- 🔒 One-time payment via Stripe — no subscriptions, ever
+- 🔑 Personal access code — works on any device, any browser, forever
+- 💬 Discord support server for any questions or issues
 
 ## Tech Stack
 
@@ -26,6 +28,9 @@ Built entirely with vanilla **HTML**, **CSS**, and **JavaScript** — no framewo
 ## Access
 
 HousePricer uses a one-time paywall model. Pay once, get lifetime access. No monthly fees, no recurring charges, no nonsense.
+
+**Live Site:** [tmplockpick.github.io/housepricer](https://tmplockpick.github.io/housepricer/)
+**Support:** [Discord Server](https://discord.gg/DMGeAH8qWN)
 
 ---
 
