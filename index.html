@@ -176,6 +176,35 @@
     .inline-conv-select { background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.2); border-radius: 6px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #f5f0e8; outline: none; cursor: pointer; flex: 1; min-width: 140px; }
     .inline-conv-result { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #d4af37; flex: 1; min-width: 140px; }
 
+    /* ── FAVOURITES ── */
+    .fav-empty { text-align: center; padding: 60px 20px; color: #4a4038; font-size: 14px; line-height: 1.8; }
+    .fav-empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .fav-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+    .fav-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.15); border-radius: 12px; padding: 20px; position: relative; cursor: pointer; transition: all 0.3s; }
+    .fav-card:hover { border-color: rgba(212,175,55,0.4); transform: translateY(-2px); background: rgba(212,175,55,0.06); }
+    .fav-card-city { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #6a6048; margin-bottom: 8px; }
+    .fav-card-price { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #d4af37; margin-bottom: 6px; }
+    .fav-card-trend { font-size: 12px; font-weight: 600; }
+    .fav-card-trend.up { color: #60c080; }
+    .fav-card-trend.down { color: #e06060; }
+    .fav-remove { position: absolute; top: 12px; right: 12px; background: none; border: none; color: #4a4038; font-size: 16px; cursor: pointer; padding: 4px; border-radius: 4px; transition: color 0.2s; }
+    .fav-remove:hover { color: #e06060; }
+    .fav-btn { background: none; border: 1px solid rgba(212,175,55,0.2); border-radius: 6px; padding: 8px 14px; font-family: 'DM Sans', sans-serif; font-size: 12px; color: #6a6048; cursor: pointer; transition: all 0.2s; margin-top: 12px; }
+    .fav-btn:hover { border-color: #d4af37; color: #d4af37; }
+    .fav-btn.saved { border-color: #d4af37; color: #d4af37; background: rgba(212,175,55,0.1); }
+
+    /* ── CHART ── */
+    .chart-section { margin-top: 24px; }
+    .chart-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #5a5040; margin-bottom: 16px; font-weight: 600; }
+    .chart-wrap { position: relative; height: 140px; background: rgba(212,175,55,0.03); border: 1px solid rgba(212,175,55,0.1); border-radius: 8px; padding: 16px; overflow: hidden; }
+    .chart-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 100%; gap: 6px; }
+    .chart-bar-wrap { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; gap: 4px; }
+    .chart-bar { width: 100%; border-radius: 3px 3px 0 0; transition: all 0.5s ease-out; min-height: 4px; }
+    .chart-bar.current { background: linear-gradient(180deg, #d4af37, #a07820); }
+    .chart-bar.past { background: rgba(212,175,55,0.3); }
+    .chart-bar-label { font-size: 9px; color: #4a4038; letter-spacing: 1px; white-space: nowrap; }
+    .chart-bar-val { font-size: 9px; color: #6a6048; }
+
     @media (max-width: 600px) { .converter-row { grid-template-columns: 1fr; } .conv-swap { width: 100%; text-align: center; } }
 
     .footer { text-align: center; margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(212,175,55,0.1); }
@@ -254,7 +283,8 @@
     <!-- TABS -->
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('search', this)">&#127968; City Search</button>
-      <button class="tab-btn" onclick="switchTab('converter', this)">&#128177; Currency Converter</button>
+      <button class="tab-btn" onclick="switchTab('converter', this)">&#128177; Converter</button>
+      <button class="tab-btn" onclick="switchTab('favourites', this)">&#11088; Favourites</button>
     </div>
 
     <!-- TAB: SEARCH -->
@@ -291,7 +321,10 @@
             <div id="resultLocation" class="result-location"></div>
             <div id="resultPrice" class="result-price"></div>
           </div>
-          <div id="resultBadge" class="result-badge"></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+            <div id="resultBadge" class="result-badge"></div>
+            <button class="fav-btn" id="favToggleBtn" onclick="toggleFav()">&#11088; Save to Favourites</button>
+          </div>
         </div>
         <p id="resultAnalysis" class="result-analysis"></p>
         <div class="stats-grid">
@@ -299,6 +332,12 @@
           <div class="stat-item"><div class="stat-label">Price per m&sup2;</div><div id="resultPerSqm" class="stat-value"></div></div>
           <div class="stat-item"><div class="stat-label">1-Year Trend</div><div id="resultTrend" class="stat-value"></div></div>
           <div class="stat-item"><div class="stat-label">Currency</div><div id="resultCurrency" class="stat-value"></div></div>
+        </div>
+        <div class="chart-section">
+          <div class="chart-title">&#128202; 5-Year Price History (Estimated)</div>
+          <div class="chart-wrap">
+            <div class="chart-bars" id="chartBars"></div>
+          </div>
         </div>
         <div class="sources"><div class="sources-label">Data Sources</div><div id="resultSources"></div></div>
         <div class="disclaimer"><strong>&#x26A0;&#xFE0F; Important:</strong> Estimated averages from Numbeo, Global Property Guide, Knight Frank, Statista &amp; local MLS data. Prices vary by neighborhood and condition. Always verify with local professionals.</div>
@@ -347,6 +386,11 @@
         <button class="conv-btn" onclick="doConvert()">&#128177; Convert Now</button>
       </div>
     </div><!-- end tab-converter -->
+
+    <!-- TAB: FAVOURITES -->
+    <div class="tab-panel" id="tab-favourites">
+      <div id="favContent"></div>
+    </div><!-- end tab-favourites -->
 
     <div class="footer"><div class="footer-text">Powered by real-time market intelligence &bull; Updated 2026 &bull; <a href="https://discord.gg/DMGeAH8qWN" target="_blank" style="color:#5865F2;text-decoration:none;">Support</a></div></div>
   </div>
@@ -744,12 +788,112 @@
     }
   }
 
+  // ── FAVOURITES ──────────────────────────────
+  function getFavs() {
+    try { return JSON.parse(localStorage.getItem('hp_favs') || '[]'); } catch(e) { return []; }
+  }
+  function saveFavs(favs) { localStorage.setItem('hp_favs', JSON.stringify(favs)); }
+
+  function toggleFav() {
+    if (!sel) return;
+    var favs = getFavs();
+    var idx = favs.findIndex(function(f) { return f.city === sel; });
+    if (idx === -1) {
+      var d = CITIES[sel];
+      favs.push({ city: sel, price: fmt(d.base, d.currency), trend: d.trend, currency: d.currency, base: d.base });
+      saveFavs(favs);
+      updateFavBtn(true);
+    } else {
+      favs.splice(idx, 1);
+      saveFavs(favs);
+      updateFavBtn(false);
+    }
+    renderFavs();
+  }
+
+  function updateFavBtn(saved) {
+    var btn = document.getElementById('favToggleBtn');
+    if (!btn) return;
+    if (saved) { btn.textContent = '★ Saved!'; btn.classList.add('saved'); }
+    else { btn.textContent = '☆ Save to Favourites'; btn.classList.remove('saved'); }
+  }
+
+  function checkIfFaved() {
+    if (!sel) return;
+    var favs = getFavs();
+    var saved = favs.some(function(f) { return f.city === sel; });
+    updateFavBtn(saved);
+  }
+
+  function removeFav(city) {
+    var favs = getFavs().filter(function(f) { return f.city !== city; });
+    saveFavs(favs);
+    renderFavs();
+    if (sel === city) updateFavBtn(false);
+  }
+
+  function renderFavs() {
+    var el = document.getElementById('favContent');
+    if (!el) return;
+    var favs = getFavs();
+    if (!favs.length) {
+      el.innerHTML = '<div class="fav-empty"><div class="fav-empty-icon">&#11088;</div>No favourites yet!<br>Search a city and click "Save to Favourites".</div>';
+      return;
+    }
+    var html = '<div class="fav-grid">';
+    favs.forEach(function(f) {
+      var up = f.trend && f.trend[0] === '+';
+      html += '<div class="fav-card" onclick="pickFavCity('' + f.city.replace(/'/g,"\'") + '')">';
+      html += '<button class="fav-remove" onclick="event.stopPropagation();removeFav('' + f.city.replace(/'/g,"\'") + '')" title="Remove">&#10005;</button>';
+      html += '<div class="fav-card-city">' + f.city + '</div>';
+      html += '<div class="fav-card-price">' + f.price + '</div>';
+      html += '<div class="fav-card-trend ' + (up?'up':'down') + '">' + (up?'↑':'↓') + ' ' + f.trend + ' YoY</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+  }
+
+  function pickFavCity(city) {
+    // Switch to search tab and load city
+    var searchBtn = document.querySelector('.tab-btn');
+    if (searchBtn) switchTab('search', searchBtn);
+    pick(city);
+  }
+
+  // ── PRICE HISTORY CHART ──────────────────────
+  function renderChart(base, trend) {
+    var bars = document.getElementById('chartBars');
+    if (!bars) return;
+    // Generate 5 years of estimated history working backwards from current
+    var trendVal = parseFloat(trend) / 100 || 0.05;
+    var years = [];
+    var price = base;
+    for (var i = 0; i < 5; i++) {
+      years.unshift({ year: (2026 - i).toString(), price: Math.round(price) });
+      price = price / (1 + trendVal);
+    }
+    var maxP = Math.max.apply(null, years.map(function(y) { return y.price; }));
+    var html = '';
+    years.forEach(function(y, i) {
+      var pct = Math.max(8, Math.round((y.price / maxP) * 100));
+      var isCurrent = i === years.length - 1;
+      var label = y.year;
+      html += '<div class="chart-bar-wrap">';
+      html += '<div class="chart-bar ' + (isCurrent ? 'current' : 'past') + '" style="height:' + pct + '%;" title="' + label + '"></div>';
+      html += '<div class="chart-bar-label">' + label + '</div>';
+      html += '</div>';
+    });
+    bars.innerHTML = html;
+  }
+
   function switchTab(name, btn) {
     document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
     document.getElementById('tab-' + name).classList.add('active');
     btn.classList.add('active');
     if (name === 'converter') { populateSelects(); doConvert(); }
+    if (name === 'favourites') { renderFavs(); }
   }
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -817,6 +961,10 @@
         ic.style.display = 'block';
         doInlineConvert();
       }
+      // render chart
+      renderChart(p, d.trend);
+      // check if already faved
+      checkIfFaved();
       g('loading').style.display = 'none';
       g('result').style.display = 'block';
       g('searchBtn').disabled = false;
