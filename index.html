@@ -404,35 +404,6 @@
     window.location.href = 'https://tmplockpick.github.io/housepricer/';
   }
 
-  window.addEventListener('load', function() {
-    if (localStorage.getItem('hp_unlocked') === '1') {
-      unlockApp();
-    } else if (window.location.search.indexOf('paid=1') !== -1) {
-      localStorage.setItem('hp_unlocked', '1');
-      // Show access code before unlocking
-      var code = getTodayCode();
-      var box = document.getElementById('accessCodeBox');
-      var val = document.getElementById('accessCodeValue');
-      if (box && val) {
-        val.textContent = code;
-        box.style.display = 'flex';
-        // 10 second countdown then enable OK button
-        var secs = 10;
-        var btn = document.getElementById('accessCodeOkBtn');
-        var cdEl = document.getElementById('codeCountdown');
-        var interval = setInterval(function() {
-          secs--;
-          if (cdEl) cdEl.textContent = secs;
-          if (secs <= 0) {
-            clearInterval(interval);
-            if (btn) { btn.disabled = false; btn.classList.add('ready'); btn.innerHTML = 'Got it &mdash; I saved my code ✓'; }
-          }
-        }, 1000);
-      } else {
-        unlockApp();
-      }
-    }
-  });
 
   function unlockApp() {
     document.getElementById('paywallScreen').style.display = 'none';
