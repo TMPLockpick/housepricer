@@ -80,6 +80,19 @@
     .access-code-ok.ready:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(212,175,55,0.4); }
     .code-countdown { font-size: 18px; font-weight: 700; font-family: 'Playfair Display', serif; min-width: 28px; }
 
+    /* ── CODE MODAL ── */
+    .code-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9998; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease-out; }
+    .code-modal { background: #0f0f1a; border: 1px solid rgba(212,175,55,0.3); border-radius: 16px; padding: 36px 32px; max-width: 420px; width: 90%; text-align: center; position: relative; }
+    .code-modal-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #f5f0e8; margin-bottom: 8px; }
+    .code-modal-sub { font-size: 13px; color: #6a6048; margin-bottom: 24px; line-height: 1.6; }
+    .code-modal-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .code-modal-input { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 14px 16px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: #f5f0e8; outline: none; text-transform: uppercase; letter-spacing: 2px; }
+    .code-modal-input:focus { border-color: rgba(212,175,55,0.6); }
+    .code-modal-btn { background: linear-gradient(135deg, #d4af37, #e8c84a); border: none; padding: 14px 20px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; color: #0a0a0f; cursor: pointer; white-space: nowrap; }
+    .code-modal-err { font-size: 12px; color: #e06060; min-height: 16px; margin-bottom: 16px; }
+    .code-modal-close { position: absolute; top: 14px; right: 18px; background: none; border: none; color: #4a4038; font-size: 20px; cursor: pointer; font-family: inherit; }
+    .code-modal-close:hover { color: #d4af37; }
+
     /* ── APP ── */
     #appScreen { display: none; min-height: 100vh; padding: 40px 20px; }
     .app { max-width: 900px; margin: 0 auto; }
@@ -181,7 +194,26 @@
 <!-- APP -->
 <div id="appScreen">
   <div class="app">
-    <div class="unlocked-bar">&#9989; <b>Access Unlocked &mdash;</b> Welcome! You have lifetime access.</div>
+    <div class="unlocked-bar" style="justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <span>&#9989; <b>Access Unlocked &mdash;</b> Welcome! You have lifetime access.</span>
+      <button onclick="openCodeModal()" style="background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.3);color:#d4af37;padding:6px 14px;border-radius:6px;font-family:DM Sans,sans-serif;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:1px;">&#128273; My Access Code</button>
+    </div>
+    <!-- Code Modal -->
+    <div class="code-modal-overlay" id="codeModal" style="display:none;">
+      <div class="code-modal">
+        <button class="code-modal-close" onclick="closeCodeModal()">&#10005;</button>
+        <div class="code-modal-title">&#128273; Access Code</div>
+        <div class="code-modal-sub">Your personal code gives you access on any device, any browser, anytime.</div>
+        <div id="currentCodeDisplay" style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#d4af37;letter-spacing:4px;margin-bottom:16px;"></div>
+        <div style="font-size:11px;color:#4a4038;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;">Enter a different code</div>
+        <div class="code-modal-row">
+          <input class="code-modal-input" id="modalCodeInput" placeholder="HP-XXXXXX" maxlength="9">
+          <button class="code-modal-btn" onclick="submitModalCode()">Apply</button>
+        </div>
+        <div class="code-modal-err" id="modalCodeErr"></div>
+        <button onclick="closeCodeModal()" style="background:transparent;border:1px solid rgba(212,175,55,0.2);color:#6a6048;padding:10px 28px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;cursor:pointer;width:100%;">Close</button>
+      </div>
+    </div>
     <div class="header">
       <div class="eyebrow">Global Real Estate Intelligence</div>
       <h1>Average House<br><span>Prices</span></h1>
@@ -341,6 +373,34 @@
     var inp = document.getElementById('codeInput');
     if (inp) inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') checkCode(); });
   });
+
+  function openCodeModal() {
+    var modal = document.getElementById('codeModal');
+    var display = document.getElementById('currentCodeDisplay');
+    if (display) display.textContent = getTodayCode();
+    if (modal) modal.style.display = 'flex';
+  }
+  function closeCodeModal() {
+    var modal = document.getElementById('codeModal');
+    if (modal) modal.style.display = 'none';
+    document.getElementById('modalCodeErr').textContent = '';
+    document.getElementById('modalCodeInput').value = '';
+  }
+  function submitModalCode() {
+    var input = document.getElementById('modalCodeInput').value.trim().toUpperCase();
+    var errEl = document.getElementById('modalCodeErr');
+    if (!input) { errEl.textContent = 'Please enter a code.'; return; }
+    if (getValidCodes().indexOf(input) !== -1) {
+      localStorage.setItem('hp_unlocked', '1');
+      errEl.style.color = '#60c080';
+      errEl.textContent = 'Code accepted! ✓';
+      setTimeout(closeCodeModal, 1200);
+    } else {
+      errEl.style.color = '#e06060';
+      errEl.textContent = 'Invalid code. Try again.';
+    }
+  }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeCodeModal(); });
 
   // Currency symbols
   var S = {
