@@ -141,6 +141,43 @@
     .sources-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #5a5048; margin-bottom: 15px; font-weight: 600; }
     .source-tag { display: inline-block; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); padding: 8px 16px; border-radius: 6px; font-size: 12px; color: #d4af37; margin: 0 8px 8px 0; font-weight: 500; }
     .disclaimer { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.2); border-left: 4px solid #d4af37; border-radius: 0 8px 8px 0; padding: 20px 24px; font-size: 13px; color: #6a6048; line-height: 1.7; }
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 0; margin-bottom: 32px; background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.15); border-radius: 10px; overflow: hidden; }
+    .tab-btn { flex: 1; background: transparent; border: none; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #5a5040; cursor: pointer; transition: all 0.3s; }
+    .tab-btn.active { background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.08)); color: #d4af37; border-bottom: 2px solid #d4af37; }
+    .tab-btn:hover:not(.active) { color: #a08030; background: rgba(212,175,55,0.05); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── CONVERTER ── */
+    .converter-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.2); border-radius: 16px; padding: 36px; }
+    .converter-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #f5f0e8; margin-bottom: 8px; }
+    .converter-sub { font-size: 14px; color: #6a6048; margin-bottom: 32px; }
+    .converter-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: end; margin-bottom: 24px; }
+    .conv-group { display: flex; flex-direction: column; gap: 8px; }
+    .conv-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #5a5040; font-weight: 600; }
+    .conv-input { background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 16px 18px; font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 600; color: #f5f0e8; outline: none; width: 100%; }
+    .conv-input:focus { border-color: rgba(212,175,55,0.5); }
+    .conv-select { background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 16px 18px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: #f5f0e8; outline: none; width: 100%; cursor: pointer; }
+    .conv-select:focus { border-color: rgba(212,175,55,0.5); }
+    .conv-swap { background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.2); border-radius: 8px; padding: 14px; cursor: pointer; color: #d4af37; font-size: 18px; transition: all 0.3s; align-self: flex-end; }
+    .conv-swap:hover { background: rgba(212,175,55,0.2); transform: rotate(180deg); }
+    .conv-result { background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.2); border-radius: 10px; padding: 20px 24px; text-align: center; margin-bottom: 20px; }
+    .conv-result-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #5a5040; margin-bottom: 8px; }
+    .conv-result-value { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800; color: #d4af37; }
+    .conv-result-rate { font-size: 12px; color: #4a4038; margin-top: 6px; }
+    .conv-btn { width: 100%; background: linear-gradient(135deg, #d4af37, #e8c84a); border: none; padding: 18px; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700; color: #0a0a0f; cursor: pointer; letter-spacing: 1px; transition: all 0.3s; }
+    .conv-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(212,175,55,0.3); }
+
+    /* inline converter on result card */
+    .inline-converter { background: rgba(212,175,55,0.04); border: 1px solid rgba(212,175,55,0.15); border-radius: 10px; padding: 20px 24px; margin-top: 20px; }
+    .inline-conv-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #5a5040; margin-bottom: 14px; font-weight: 600; }
+    .inline-conv-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .inline-conv-select { background: rgba(0,0,0,0.4); border: 1px solid rgba(212,175,55,0.2); border-radius: 6px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: #f5f0e8; outline: none; cursor: pointer; flex: 1; min-width: 140px; }
+    .inline-conv-result { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #d4af37; flex: 1; min-width: 140px; }
+
+    @media (max-width: 600px) { .converter-row { grid-template-columns: 1fr; } .conv-swap { width: 100%; text-align: center; } }
+
     .footer { text-align: center; margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(212,175,55,0.1); }
     .footer-text { font-size: 12px; color: #4a4038; letter-spacing: 1.5px; text-transform: uppercase; }
     @media (max-width: 600px) { .result-header { flex-direction: column; } .stats-grid { grid-template-columns: 1fr 1fr; } }
@@ -214,6 +251,14 @@
         <button onclick="closeCodeModal()" style="background:transparent;border:1px solid rgba(212,175,55,0.2);color:#6a6048;padding:10px 28px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:13px;cursor:pointer;width:100%;">Close</button>
       </div>
     </div>
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('search', this)">&#127968; City Search</button>
+      <button class="tab-btn" onclick="switchTab('converter', this)">&#128177; Currency Converter</button>
+    </div>
+
+    <!-- TAB: SEARCH -->
+    <div class="tab-panel active" id="tab-search">
     <div class="header">
       <div class="eyebrow">Global Real Estate Intelligence</div>
       <h1>Average House<br><span>Prices</span></h1>
@@ -257,8 +302,52 @@
         </div>
         <div class="sources"><div class="sources-label">Data Sources</div><div id="resultSources"></div></div>
         <div class="disclaimer"><strong>&#x26A0;&#xFE0F; Important:</strong> Estimated averages from Numbeo, Global Property Guide, Knight Frank, Statista &amp; local MLS data. Prices vary by neighborhood and condition. Always verify with local professionals.</div>
+        <div class="inline-converter" id="inlineConverter" style="display:none;">
+          <div class="inline-conv-title">&#128177; Convert this price to another currency</div>
+          <div class="inline-conv-row">
+            <select class="inline-conv-select" id="inlineConvTo" onchange="doInlineConvert()"></select>
+            <div class="inline-conv-result" id="inlineConvResult">—</div>
+          </div>
+        </div>
       </div>
     </div>
+    </div><!-- end tab-search -->
+
+    <!-- TAB: CONVERTER -->
+    <div class="tab-panel" id="tab-converter">
+      <div class="converter-card">
+        <div class="converter-title">Currency Converter</div>
+        <div class="converter-sub">Convert any amount between 40+ world currencies instantly.</div>
+        <div class="converter-row">
+          <div class="conv-group">
+            <div class="conv-label">Amount</div>
+            <input class="conv-input" id="convAmount" type="number" value="100" min="0">
+          </div>
+          <button class="conv-swap" onclick="swapCurrencies()" title="Swap">&#8646;</button>
+          <div class="conv-group">
+            <div class="conv-label">Result</div>
+            <input class="conv-input" id="convResult" readonly placeholder="0.00" style="color:#d4af37;">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+          <div class="conv-group">
+            <div class="conv-label">From</div>
+            <select class="conv-select" id="convFrom" onchange="doConvert()"></select>
+          </div>
+          <div class="conv-group">
+            <div class="conv-label">To</div>
+            <select class="conv-select" id="convTo" onchange="doConvert()"></select>
+          </div>
+        </div>
+        <div class="conv-result">
+          <div class="conv-result-label">Exchange Rate</div>
+          <div class="conv-result-value" id="convRate">—</div>
+          <div class="conv-result-rate" id="convRateNote">Select currencies to see rate</div>
+        </div>
+        <button class="conv-btn" onclick="doConvert()">&#128177; Convert Now</button>
+      </div>
+    </div><!-- end tab-converter -->
+
     <div class="footer"><div class="footer-text">Powered by real-time market intelligence &bull; Updated 2026 &bull; <a href="https://discord.gg/DMGeAH8qWN" target="_blank" style="color:#5865F2;text-decoration:none;">Support</a></div></div>
   </div>
 </div>
@@ -558,6 +647,115 @@
     'Christchurch, New Zealand':  { base: 680000,     trend: '+2.4%',  currency: 'NZD', region: 'Oceania' }
   };
 
+  // ── CURRENCY CONVERTER ──────────────────────
+  var RATES = {
+    USD:1, EUR:0.92, GBP:0.79, JPY:149.5, CAD:1.36, AUD:1.53, CHF:0.89,
+    CNY:7.24, HKD:7.82, SGD:1.34, NZD:1.63, SEK:10.42, NOK:10.58, DKK:6.89,
+    INR:83.1, KRW:1325, THB:35.1, MYR:4.72, IDR:15600, PHP:56.2, VND:24500,
+    TWD:31.8, BDT:110, PKR:278, LKR:320,
+    NGN:1580, EGP:30.9, KES:129, ZAR:18.6, GHS:12.1, ETB:56.5, MAD:10.0,
+    XOF:552, TZS:2520, UGX:3780, RWF:1285, ZMW:26.5, TND:3.11, DZD:134,
+    AED:3.67, SAR:3.75, QAR:3.64, KWD:0.307, BHD:0.376, OMR:0.385, JOD:0.709,
+    ILS:3.71, TRY:30.5, RUB:90.2,
+    BRL:4.97, MXN:17.1, ARS:830, COP:3950, PEN:3.71, CLP:895, UYU:38.5,
+    PLN:4.02, CZK:22.6, HUF:352
+  };
+  var CURR_NAMES = {
+    USD:'US Dollar', EUR:'Euro', GBP:'British Pound', JPY:'Japanese Yen',
+    CAD:'Canadian Dollar', AUD:'Australian Dollar', CHF:'Swiss Franc',
+    CNY:'Chinese Yuan', HKD:'Hong Kong Dollar', SGD:'Singapore Dollar',
+    NZD:'New Zealand Dollar', SEK:'Swedish Krona', NOK:'Norwegian Krone',
+    DKK:'Danish Krone', INR:'Indian Rupee', KRW:'South Korean Won',
+    THB:'Thai Baht', MYR:'Malaysian Ringgit', IDR:'Indonesian Rupiah',
+    PHP:'Philippine Peso', VND:'Vietnamese Dong', TWD:'Taiwan Dollar',
+    BDT:'Bangladeshi Taka', PKR:'Pakistani Rupee', LKR:'Sri Lankan Rupee',
+    NGN:'Nigerian Naira', EGP:'Egyptian Pound', KES:'Kenyan Shilling',
+    ZAR:'South African Rand', GHS:'Ghanaian Cedi', ETB:'Ethiopian Birr',
+    MAD:'Moroccan Dirham', XOF:'West African CFA', TZS:'Tanzanian Shilling',
+    UGX:'Ugandan Shilling', RWF:'Rwandan Franc', ZMW:'Zambian Kwacha',
+    TND:'Tunisian Dinar', DZD:'Algerian Dinar', AED:'UAE Dirham',
+    SAR:'Saudi Riyal', QAR:'Qatari Riyal', KWD:'Kuwaiti Dinar',
+    BHD:'Bahraini Dinar', OMR:'Omani Rial', JOD:'Jordanian Dinar',
+    ILS:'Israeli Shekel', TRY:'Turkish Lira', RUB:'Russian Ruble',
+    BRL:'Brazilian Real', MXN:'Mexican Peso', ARS:'Argentine Peso',
+    COP:'Colombian Peso', PEN:'Peruvian Sol', CLP:'Chilean Peso',
+    UYU:'Uruguayan Peso', PLN:'Polish Zloty', CZK:'Czech Koruna', HUF:'Hungarian Forint'
+  };
+
+  function populateSelects() {
+    var keys = Object.keys(RATES).sort();
+    var selects = ['convFrom', 'convTo', 'inlineConvTo'];
+    selects.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = '';
+      keys.forEach(function(k) {
+        var opt = document.createElement('option');
+        opt.value = k;
+        opt.textContent = k + ' — ' + (CURR_NAMES[k] || k);
+        el.appendChild(opt);
+      });
+    });
+    var fromEl = document.getElementById('convFrom');
+    var toEl = document.getElementById('convTo');
+    if (fromEl) fromEl.value = 'USD';
+    if (toEl) toEl.value = 'EUR';
+    var inlineEl = document.getElementById('inlineConvTo');
+    if (inlineEl) inlineEl.value = 'USD';
+  }
+
+  function convertAmount(amount, from, to) {
+    if (!RATES[from] || !RATES[to]) return null;
+    return (amount / RATES[from]) * RATES[to];
+  }
+
+  function doConvert() {
+    var amount = parseFloat(document.getElementById('convAmount').value) || 0;
+    var from = document.getElementById('convFrom').value;
+    var to = document.getElementById('convTo').value;
+    var result = convertAmount(amount, from, to);
+    if (result !== null) {
+      document.getElementById('convResult').value = result.toLocaleString(undefined, {maximumFractionDigits:2});
+      var rate = convertAmount(1, from, to);
+      document.getElementById('convRate').textContent = (sym(from)||from) + '1 = ' + (sym(to)||to) + rate.toFixed(4);
+      document.getElementById('convRateNote').textContent = 'Approximate mid-market rate';
+    }
+  }
+
+  function swapCurrencies() {
+    var f = document.getElementById('convFrom');
+    var t = document.getElementById('convTo');
+    var tmp = f.value; f.value = t.value; t.value = tmp;
+    doConvert();
+  }
+
+  function doInlineConvert() {
+    var to = document.getElementById('inlineConvTo').value;
+    if (!sel || !CITIES[sel]) return;
+    var from = CITIES[sel].currency;
+    var amount = CITIES[sel].base;
+    var result = convertAmount(amount, from, to);
+    if (result !== null) {
+      var s = sym(to) || to;
+      if (result >= 1e9) document.getElementById('inlineConvResult').textContent = s + (result/1e9).toFixed(2) + 'B';
+      else if (result >= 1e6) document.getElementById('inlineConvResult').textContent = s + (result/1e6).toFixed(2) + 'M';
+      else if (result >= 1e3) document.getElementById('inlineConvResult').textContent = s + (result/1e3).toFixed(0) + 'K';
+      else document.getElementById('inlineConvResult').textContent = s + result.toLocaleString(undefined,{maximumFractionDigits:2});
+    }
+  }
+
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+    if (name === 'converter') { populateSelects(); doConvert(); }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    populateSelects();
+  });
+
   var sel = null;
   function g(id) { return document.getElementById(id); }
 
@@ -607,6 +805,18 @@
       ['Numbeo', 'Global Property Guide', 'Knight Frank', 'Statista', 'Local MLS Data'].forEach(function(src) {
         var sp = document.createElement('span'); sp.className = 'source-tag'; sp.textContent = src; sb.appendChild(sp);
       });
+      // show inline converter
+      var ic = document.getElementById('inlineConverter');
+      var ics = document.getElementById('inlineConvTo');
+      if (ic && ics) {
+        populateSelects();
+        // set inline from city currency
+        var cityCurr = d.currency;
+        // default to USD unless city IS USD
+        ics.value = cityCurr === 'USD' ? 'EUR' : 'USD';
+        ic.style.display = 'block';
+        doInlineConvert();
+      }
       g('loading').style.display = 'none';
       g('result').style.display = 'block';
       g('searchBtn').disabled = false;
