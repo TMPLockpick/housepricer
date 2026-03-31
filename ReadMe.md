@@ -1,6 +1,6 @@
 # HousePricer 🏠
 
-**HousePricer** is a real-time global property intelligence platform that gives instant access to average house prices across **120+ major cities worldwide**. Designed for investors, researchers, expats, digital nomads, and anyone curious about the global real estate market — HousePricer delivers accurate, up-to-date market estimates all in one place.
+**HousePricer** is a real-time global property intelligence platform that gives instant access to average house prices across **150+ major cities worldwide**. Designed for investors, researchers, expats, digital nomads, and anyone curious about the global real estate market — HousePricer delivers accurate, up-to-date market estimates all in one place.
 
 ## What Makes It Different
 
@@ -12,7 +12,7 @@ All market estimates are compiled and cross-referenced from the most trusted pro
 
 ## Features
 
-- 🌍 120+ cities across Africa, Americas, Europe, Asia & the Middle East
+- 🌍 150+ cities across Africa, Americas, Europe, Asia & the Middle East
 - 💱 Prices displayed in correct local currency symbols
 - 📈 Year-on-year market trend indicators
 - 📊 Full stats: price range, price per m², market status
