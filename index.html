@@ -196,6 +196,12 @@
       background: rgba(212,175,55,0.22);
       transform: translateX(-2px);
     }
+
+    .region-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+    .region-btn{background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.15);color:#6a6048;padding:6px 14px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;}
+    .region-btn:hover,.region-btn.active{background:rgba(212,175,55,0.2);border-color:rgba(212,175,55,0.5);color:#d4af37;}
+    .tab-badge{background:#d4af37;color:#0a0a0f;border-radius:10px;padding:2px 7px;font-size:10px;font-weight:700;margin-left:4px;vertical-align:middle;}
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>emailjs.init("URvsAP8DSUFFfJL9X");</script>
@@ -210,19 +216,19 @@
   <div class="pw-box">
     <span class="pw-eye">Global Real Estate Intelligence</span>
     <h2 class="pw-title">Average House<br><span>Prices</span></h2>
-    <p class="pw-sub">Instant access to property prices across 120+ cities worldwide, sourced from Numbeo, Knight Frank, Statista &amp; more.</p>
+    <p class="pw-sub">Instant access to property prices across 150+ cities worldwide, sourced from Numbeo, Knight Frank, Statista &amp; more.</p>
     <div class="pw-feats">
-      <div class="pw-feat"><div class="pw-feat-ico">&#127758;</div><div class="pw-feat-txt"><b>120+ Cities Worldwide</b>Africa, Americas, Europe, Asia &amp; Middle East</div></div>
+      <div class="pw-feat"><div class="pw-feat-ico">&#127758;</div><div class="pw-feat-txt"><b>150+ Cities Worldwide</b>Africa, Americas, Europe, Asia &amp; Middle East</div></div>
       <div class="pw-feat"><div class="pw-feat-ico">&#128177;</div><div class="pw-feat-txt"><b>Correct Currency Symbols</b>&#8358;, &yen;, &#8377;, &pound;, &euro; &mdash; always local money</div></div>
       <div class="pw-feat"><div class="pw-feat-ico">&#128202;</div><div class="pw-feat-txt"><b>Full Market Stats + Chart</b>Range, per m&sup2;, trend, history &amp; currency converter</div></div>
       <div class="pw-feat"><div class="pw-feat-ico">&#9854;</div><div class="pw-feat-txt"><b>Lifetime Access</b>Pay once, use forever. No subscriptions.</div></div>
     </div>
     <div class="pw-pricebox">
       <div class="pw-pricelbl">One-Time Payment &bull; Lifetime Access</div>
-      <div class="pw-price"><sup>$</sup>7</div>
+      <div class="pw-price"><sup>$</sup>0.99</div>
       <div class="pw-pricenote">No subscriptions &bull; Instant unlock &bull; Secured by Stripe</div>
     </div>
-    <button class="pw-btn" id="payBtn">&#128274; Unlock for $7 &mdash; Pay with Card</button>
+    <button class="pw-btn" id="payBtn">&#128274; Unlock for $0.99 &mdash; Pay with Card</button>
     <div class="pw-secure">&#128274; Secured by Stripe &bull; 256-bit SSL</div>
     <div class="pw-code-section">
       <div class="pw-code-label">Already paid? Enter your access code</div>
@@ -272,7 +278,7 @@
     <div class="tabs">
       <button class="tab-btn active" data-tab="search">&#127968; City Search</button>
       <button class="tab-btn" data-tab="converter">&#128177; Converter</button>
-      <button class="tab-btn" data-tab="favourites">&#11088; Favourites</button>
+      <button class="tab-btn" data-tab="favourites">&#11088; Favourites<span class="tab-badge" id="favBadge" style="display:none">0</span></button>
     </div>
 
     <!-- TAB: SEARCH -->
@@ -296,6 +302,16 @@
           <button class="ex-chip" data-city="London, UK">London &pound;</button>
           <button class="ex-chip" data-city="New York City, USA">NYC $</button>
           <button class="ex-chip" data-city="Dubai, UAE">Dubai</button>
+        </div>
+        <div class="region-filter" id="regionFilter">
+          <span style="font-size:12px;color:#6b6658;text-transform:uppercase;letter-spacing:2px;font-weight:500;align-self:center;">Region:</span>
+          <button class="region-btn active" data-region="all" onclick="filterRegion(this,'all')">All</button>
+          <button class="region-btn" data-region="Africa" onclick="filterRegion(this,'Africa')">🌍 Africa</button>
+          <button class="region-btn" data-region="Asia" onclick="filterRegion(this,'Asia')">🌏 Asia</button>
+          <button class="region-btn" data-region="Europe" onclick="filterRegion(this,'Europe')">🇪🇺 Europe</button>
+          <button class="region-btn" data-region="North America" onclick="filterRegion(this,'North America')">🌎 Americas</button>
+          <button class="region-btn" data-region="Middle East" onclick="filterRegion(this,'Middle East')">🕌 Mid East</button>
+          <button class="region-btn" data-region="Oceania" onclick="filterRegion(this,'Oceania')">🦘 Oceania</button>
         </div>
       </div>
       <div id="loading" class="loading" style="display:none;">
@@ -450,6 +466,9 @@ function showCodeOverlay() {
 // INIT — runs after page loads
 // ════════════════════════════════════════
 window.addEventListener('load', function() {
+  var _initFavs=(function(){try{return JSON.parse(localStorage.getItem('hp_favs')||'[]');}catch(e){return[];}})();
+  var _badge=document.getElementById('favBadge');
+  if(_badge&&_initFavs.length){_badge.textContent=_initFavs.length;_badge.style.display='inline';}
   if (localStorage.getItem('hp_unlocked') === '1') {
     unlockApp();
   } else if (window.location.search.indexOf('paid=1') !== -1) {
@@ -514,8 +533,8 @@ document.addEventListener('keydown', function(e) { if (e.key==='Escape') closeMo
 // ════════════════════════════════════════
 // CURRENCY DATA
 // ════════════════════════════════════════
-var SYM = {USD:'$',EUR:'\u20AC',GBP:'\u00A3',JPY:'\u00A5',CAD:'C$',AUD:'A$',CHF:'Fr',CNY:'\u00A5',HKD:'HK$',SGD:'S$',NZD:'NZ$',SEK:'kr',NOK:'kr',DKK:'kr',INR:'\u20B9',KRW:'\u20A9',THB:'\u0E3F',MYR:'RM',IDR:'Rp',PHP:'\u20B1',VND:'\u20AB',TWD:'NT$',BDT:'\u09F3',PKR:'\u20A8',LKR:'Rs',NGN:'\u20A6',EGP:'E\u00A3',KES:'KSh',ZAR:'R',GHS:'\u20B5',ETB:'Br',MAD:'DH',XOF:'CFA',TZS:'TSh',UGX:'USh',RWF:'RF',ZMW:'ZK',TND:'DT',DZD:'DA',AED:'\u062F.\u0625',SAR:'\uFDFC',QAR:'QR',KWD:'KD',BHD:'BD',OMR:'OMR',JOD:'JD',ILS:'\u20AA',TRY:'\u20BA',RUB:'\u20BD',BRL:'R$',MXN:'MX$',ARS:'AR$',COP:'$',PEN:'S/.',CLP:'$',UYU:'$U',PLN:'z\u0142',CZK:'K\u010D',HUF:'Ft'};
-var RATES = {USD:1,EUR:0.92,GBP:0.79,JPY:149.5,CAD:1.36,AUD:1.53,CHF:0.89,CNY:7.24,HKD:7.82,SGD:1.34,NZD:1.63,SEK:10.42,NOK:10.58,DKK:6.89,INR:83.1,KRW:1325,THB:35.1,MYR:4.72,IDR:15600,PHP:56.2,VND:24500,TWD:31.8,BDT:110,PKR:278,LKR:320,NGN:1580,EGP:30.9,KES:129,ZAR:18.6,GHS:12.1,ETB:56.5,MAD:10.0,XOF:552,TZS:2520,UGX:3780,RWF:1285,ZMW:26.5,TND:3.11,DZD:134,AED:3.67,SAR:3.75,QAR:3.64,KWD:0.307,BHD:0.376,OMR:0.385,JOD:0.709,ILS:3.71,TRY:30.5,RUB:90.2,BRL:4.97,MXN:17.1,ARS:830,COP:3950,PEN:3.71,CLP:895,UYU:38.5,PLN:4.02,CZK:22.6,HUF:352};
+var SYM = {USD:'$',EUR:'\u20AC',GBP:'\u00A3',JPY:'\u00A5',CAD:'C$',AUD:'A$',CHF:'Fr',CNY:'\u00A5',HKD:'HK$',SGD:'S$',NZD:'NZ$',SEK:'kr',NOK:'kr',DKK:'kr',INR:'\u20B9',KRW:'\u20A9',THB:'\u0E3F',MYR:'RM',IDR:'Rp',PHP:'\u20B1',VND:'\u20AB',TWD:'NT$',BDT:'\u09F3',PKR:'\u20A8',LKR:'Rs',NGN:'\u20A6',EGP:'E\u00A3',KES:'KSh',ZAR:'R',GHS:'\u20B5',ETB:'Br',MAD:'DH',XOF:'CFA',TZS:'TSh',UGX:'USh',RWF:'RF',ZMW:'ZK',TND:'DT',DZD:'DA',AED:'\u062F.\u0625',SAR:'\uFDFC',QAR:'QR',KWD:'KD',BHD:'BD',OMR:'OMR',JOD:'JD',ILS:'\u20AA',TRY:'\u20BA',RUB:'\u20BD',BRL:'R$',MXN:'MX$',ARS:'AR$',COP:'$',PEN:'S/.',CLP:'$',UYU:'$U',PLN:'z\u0142',CZK:'K\u010D',HUF:'Ft','MMK':'K','NPR':'Rs','MNT':'₮','KZT':'₸','UZS':'soʻm','AZN':'₼','GEL':'₾','AMD':'֏','RON':'lei','BGN':'лв','ISK':'kr','XAF':'CFA','MZN':'MT','NAD':'N$','BWP':'P','MGA':'Ar','GNF':'GF','CRC':'₡',,'GTQ:'Q','BOB':'Bs','PYG':'₲','IQD':'IQD','IRR':'﷼','AFN':'؋','PGK':'K','FJD':'FJ$','XPF':'XPF'};
+var RATES = {USD:1,EUR:0.92,GBP:0.79,JPY:149.5,CAD:1.36,AUD:1.53,CHF:0.89,CNY:7.24,HKD:7.82,SGD:1.34,NZD:1.63,SEK:10.42,NOK:10.58,DKK:6.89,INR:83.1,KRW:1325,THB:35.1,MYR:4.72,IDR:15600,PHP:56.2,VND:24500,TWD:31.8,BDT:110,PKR:278,LKR:320,NGN:1580,EGP:30.9,KES:129,ZAR:18.6,GHS:12.1,ETB:56.5,MAD:10.0,XOF:552,TZS:2520,UGX:3780,RWF:1285,ZMW:26.5,TND:3.11,DZD:134,AED:3.67,SAR:3.75,QAR:3.64,KWD:0.307,BHD:0.376,OMR:0.385,JOD:0.709,ILS:3.71,TRY:30.5,RUB:90.2,BRL:4.97,MXN:17.1,ARS:830,COP:3950,PEN:3.71,CLP:895,UYU:38.5,PLN:4.02,CZK:22.6,HUF:352,MMK:2100,NPR:133,MNT:3450,KZT:450,UZS:12400,AZN:1.7,GEL:2.68,AMD:400,RON:4.6,BGN:1.8,ISK:138,XAF:605,MZN:63.8,NAD:18.6,BWP:13.5,MGA:4500,GNF:8600,CRC:530,GTQ:7.8,BOB:6.9,PYG:7300,IQD:1310,IRR:42000,AFN:72,PGK:3.8,FJD:2.25,XPF:110};
 var CURR_NAMES = {USD:'US Dollar',EUR:'Euro',GBP:'British Pound',JPY:'Japanese Yen',CAD:'Canadian Dollar',AUD:'Australian Dollar',CHF:'Swiss Franc',CNY:'Chinese Yuan',HKD:'Hong Kong Dollar',SGD:'Singapore Dollar',NZD:'New Zealand Dollar',SEK:'Swedish Krona',NOK:'Norwegian Krone',DKK:'Danish Krone',INR:'Indian Rupee',KRW:'South Korean Won',THB:'Thai Baht',MYR:'Malaysian Ringgit',IDR:'Indonesian Rupiah',PHP:'Philippine Peso',VND:'Vietnamese Dong',TWD:'Taiwan Dollar',BDT:'Bangladeshi Taka',PKR:'Pakistani Rupee',LKR:'Sri Lankan Rupee',NGN:'Nigerian Naira',EGP:'Egyptian Pound',KES:'Kenyan Shilling',ZAR:'South African Rand',GHS:'Ghanaian Cedi',ETB:'Ethiopian Birr',MAD:'Moroccan Dirham',XOF:'West African CFA',TZS:'Tanzanian Shilling',UGX:'Ugandan Shilling',RWF:'Rwandan Franc',ZMW:'Zambian Kwacha',TND:'Tunisian Dinar',DZD:'Algerian Dinar',AED:'UAE Dirham',SAR:'Saudi Riyal',QAR:'Qatari Riyal',KWD:'Kuwaiti Dinar',BHD:'Bahraini Dinar',OMR:'Omani Rial',JOD:'Jordanian Dinar',ILS:'Israeli Shekel',TRY:'Turkish Lira',RUB:'Russian Ruble',BRL:'Brazilian Real',MXN:'Mexican Peso',ARS:'Argentine Peso',COP:'Colombian Peso',PEN:'Peruvian Sol',CLP:'Chilean Peso',UYU:'Uruguayan Peso',PLN:'Polish Zloty',CZK:'Czech Koruna',HUF:'Hungarian Forint'};
 
 function s(c){return SYM[c]||c;}
@@ -657,7 +676,93 @@ var CITIES = {
   'Auckland, New Zealand':{base:1050000,trend:'+2.1%',currency:'NZD',region:'Oceania'},
   'Wellington, New Zealand':{base:820000,trend:'+1.8%',currency:'NZD',region:'Oceania'},
   'Christchurch, New Zealand':{base:680000,trend:'+2.4%',currency:'NZD',region:'Oceania'}
+  // ── NEW CITIES ──
+  'Naypyidaw, Myanmar':{base:85000000,trend:'+4.2%',currency:'MMK',region:'Asia'},
+  'Yangon, Myanmar':{base:120000000,trend:'+5.1%',currency:'MMK',region:'Asia'},
+  'Phnom Penh, Cambodia':{base:180000,trend:'+8.2%',currency:'USD',region:'Asia'},
+  'Vientiane, Laos':{base:160000,trend:'+6.1%',currency:'USD',region:'Asia'},
+  'Colombo, Sri Lanka':{base:45000000,trend:'+4.1%',currency:'LKR',region:'Asia'},
+  'Kathmandu, Nepal':{base:18000000,trend:'+7.2%',currency:'NPR',region:'Asia'},
+  'Ulaanbaatar, Mongolia':{base:180000000,trend:'+5.8%',currency:'MNT',region:'Asia'},
+  'Almaty, Kazakhstan':{base:45000000,trend:'+6.4%',currency:'KZT',region:'Asia'},
+  'Tashkent, Uzbekistan':{base:380000000,trend:'+7.1%',currency:'UZS',region:'Asia'},
+  'Baku, Azerbaijan':{base:180000,trend:'+5.9%',currency:'AZN',region:'Asia'},
+  'Tbilisi, Georgia':{base:280000,trend:'+8.4%',currency:'GEL',region:'Asia'},
+  'Yerevan, Armenia':{base:85000000,trend:'+9.1%',currency:'AMD',region:'Asia'},
+  'Islamabad, Pakistan':{base:42000000,trend:'+5.8%',currency:'PKR',region:'Asia'},
+  'Lahore, Pakistan':{base:28000000,trend:'+6.2%',currency:'PKR',region:'Asia'},
+  'Colombo, Sri Lanka':{base:45000000,trend:'+4.1%',currency:'LKR',region:'Asia'},
+  // Europe extras
+  'Porto, Portugal':{base:380000,trend:'+9.2%',currency:'EUR',region:'Europe'},
+  'Seville, Spain':{base:320000,trend:'+7.1%',currency:'EUR',region:'Europe'},
+  'Valencia, Spain':{base:290000,trend:'+8.4%',currency:'EUR',region:'Europe'},
+  'Naples, Italy':{base:280000,trend:'+3.2%',currency:'EUR',region:'Europe'},
+  'Florence, Italy':{base:520000,trend:'+4.8%',currency:'EUR',region:'Europe'},
+  'Krakow, Poland':{base:320000,trend:'+7.4%',currency:'PLN',region:'Europe'},
+  'Wroclaw, Poland':{base:280000,trend:'+6.8%',currency:'PLN',region:'Europe'},
+  'Bratislava, Slovakia':{base:280000,trend:'+5.4%',currency:'EUR',region:'Europe'},
+  'Ljubljana, Slovenia':{base:380000,trend:'+6.1%',currency:'EUR',region:'Europe'},
+  'Zagreb, Croatia':{base:250000,trend:'+8.2%',currency:'EUR',region:'Europe'},
+  'Bucharest, Romania':{base:180000,trend:'+7.8%',currency:'RON',region:'Europe'},
+  'Sofia, Bulgaria':{base:150000,trend:'+8.9%',currency:'BGN',region:'Europe'},
+  'Tallinn, Estonia':{base:280000,trend:'+4.2%',currency:'EUR',region:'Europe'},
+  'Riga, Latvia':{base:180000,trend:'+3.8%',currency:'EUR',region:'Europe'},
+  'Vilnius, Lithuania':{base:220000,trend:'+5.1%',currency:'EUR',region:'Europe'},
+  'Helsinki, Finland':{base:480000,trend:'+1.2%',currency:'EUR',region:'Europe'},
+  'Reykjavik, Iceland':{base:680000,trend:'+3.4%',currency:'ISK',region:'Europe'},
+  'Valletta, Malta':{base:420000,trend:'+6.8%',currency:'EUR',region:'Europe'},
+  'Nicosia, Cyprus':{base:320000,trend:'+5.2%',currency:'EUR',region:'Europe'},
+  // Africa extras
+  'Douala, Cameroon':{base:65000000,trend:'+5.8%',currency:'XAF',region:'Central Africa'},
+  'Kinshasa, DRC':{base:120000,trend:'+4.2%',currency:'USD',region:'Central Africa'},
+  'Maputo, Mozambique':{base:5800000,trend:'+6.1%',currency:'MZN',region:'Southern Africa'},
+  'Windhoek, Namibia':{base:1800000,trend:'+3.8%',currency:'NAD',region:'Southern Africa'},
+  'Gaborone, Botswana':{base:1200000,trend:'+4.5%',currency:'BWP',region:'Southern Africa'},
+  'Antananarivo, Madagascar':{base:280000000,trend:'+5.2%',currency:'MGA',region:'East Africa'},
+  'Conakry, Guinea':{base:1800000000,trend:'+6.8%',currency:'GNF',region:'West Africa'},
+  'Bamako, Mali':{base:85000000,trend:'+5.4%',currency:'XOF',region:'West Africa'},
+  'Ouagadougou, Burkina Faso':{base:65000000,trend:'+4.8%',currency:'XOF',region:'West Africa'},
+  'Lome, Togo':{base:55000000,trend:'+5.1%',currency:'XOF',region:'West Africa'},
+  'Cotonou, Benin':{base:72000000,trend:'+6.2%',currency:'XOF',region:'West Africa'},
+  // Americas extras
+  'Guadalajara, Mexico':{base:3800000,trend:'+7.4%',currency:'MXN',region:'Central America'},
+  'Monterrey, Mexico':{base:4200000,trend:'+8.1%',currency:'MXN',region:'Central America'},
+  'Panama City, Panama':{base:280000,trend:'+5.8%',currency:'USD',region:'Central America'},
+  'San Jose, Costa Rica':{base:185000,trend:'+4.2%',currency:'CRC',region:'Central America'},
+  'Guatemala City, Guatemala':{base:1800000,trend:'+5.1%',currency:'GTQ',region:'Central America'},
+  'Bogota, Colombia':{base:650000000,trend:'+5.8%',currency:'COP',region:'South America'},
+  'Cartagena, Colombia':{base:820000000,trend:'+9.4%',currency:'COP',region:'South America'},
+  'Quito, Ecuador':{base:120000,trend:'+3.8%',currency:'USD',region:'South America'},
+  'Guayaquil, Ecuador':{base:95000,trend:'+4.2%',currency:'USD',region:'South America'},
+  'La Paz, Bolivia':{base:320000,trend:'+3.1%',currency:'BOB',region:'South America'},
+  'Asuncion, Paraguay':{base:180000,trend:'+5.4%',currency:'PYG',region:'South America'},
+  'Montevideo, Uruguay':{base:280000,trend:'+5.2%',currency:'UYU',region:'South America'},
+  // Middle East extras
+  'Baghdad, Iraq':{base:180000,trend:'+6.8%',currency:'IQD',region:'Middle East'},
+  'Tehran, Iran':{base:8500000000,trend:'+22.4%',currency:'IRR',region:'Middle East'},
+  'Kabul, Afghanistan':{base:4500000,trend:'+2.1%',currency:'AFN',region:'Middle East'},
+  // Oceania extras
+  'Canberra, Australia':{base:780000,trend:'+5.2%',currency:'AUD',region:'Oceania'},
+  'Adelaide, Australia':{base:620000,trend:'+7.4%',currency:'AUD',region:'Oceania'},
+  'Gold Coast, Australia':{base:820000,trend:'+8.8%',currency:'AUD',region:'Oceania'},
+  'Port Moresby, PNG':{base:450000,trend:'+4.1%',currency:'PGK',region:'Oceania'},
+  'Suva, Fiji':{base:280000,trend:'+3.8%',currency:'FJD',region:'Oceania'},
+  'Noumea, New Caledonia':{base:380000,trend:'+2.1%',currency:'XPF',region:'Oceania'},
+
 };
+
+
+// ════════════════════════════════════════
+// REGION FILTER
+// ════════════════════════════════════════
+var currentRegion = 'all';
+function filterRegion(btn, region) {
+  currentRegion = region;
+  document.querySelectorAll('.region-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var e = new Event('input');
+  document.getElementById('searchInput').dispatchEvent(e);
+}
 
 // ════════════════════════════════════════
 // TABS
@@ -686,7 +791,11 @@ inp.addEventListener('input', function() {
   curCity = null; sbtn.disabled = true;
   var q = inp.value.trim();
   if (q.length < 2) { sug.style.display='none'; return; }
-  var m = Object.keys(CITIES).filter(function(c){return c.toLowerCase().indexOf(q.toLowerCase())!==-1;}).slice(0,8);
+  var m = Object.keys(CITIES).filter(function(c){
+    var matchQ = c.toLowerCase().indexOf(q.toLowerCase())!==-1;
+    var matchR = currentRegion==='all' || (CITIES[c].region && CITIES[c].region.toLowerCase().indexOf(currentRegion.toLowerCase())!==-1);
+    return matchQ && matchR;
+  }).slice(0,8);
   sug.innerHTML = '';
   if (!m.length) {
     sug.innerHTML = '<div class="sug-item" style="color:#6b6658;justify-content:center;">No cities found</div>';
@@ -810,7 +919,11 @@ document.getElementById('convGo').addEventListener('click', doConvert);
 // FAVOURITES
 // ════════════════════════════════════════
 function getFavs(){try{return JSON.parse(localStorage.getItem('hp_favs')||'[]');}catch(e){return[];}}
-function saveFavs(f){localStorage.setItem('hp_favs',JSON.stringify(f));}
+function saveFavs(f){
+  localStorage.setItem('hp_favs',JSON.stringify(f));
+  var badge=document.getElementById('favBadge');
+  if(badge){badge.textContent=f.length;badge.style.display=f.length?'inline':'none';}
+}
 function updateFavBtn() {
   if (!curCity) return;
   var saved = getFavs().some(function(f){return f.city===curCity;});
