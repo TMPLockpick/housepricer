@@ -202,6 +202,61 @@
     .region-btn:hover,.region-btn.active{background:rgba(212,175,55,0.2);border-color:rgba(212,175,55,0.5);color:#d4af37;}
     .tab-badge{background:#d4af37;color:#0a0a0f;border-radius:10px;padding:2px 7px;font-size:10px;font-weight:700;margin-left:4px;vertical-align:middle;}
 
+
+    /* AUTH SCREEN */
+    #authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;}
+    .auth-box{max-width:460px;width:100%;text-align:center;}
+    .auth-eye{font-size:11px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:#d4af37;margin-bottom:24px;display:block;}
+    .auth-title{font-family:'Playfair Display',serif;font-size:clamp(32px,6vw,52px);font-weight:900;color:#f5f0e8;line-height:1.1;margin-bottom:12px;}
+    .auth-title span{color:#d4af37;font-style:italic;}
+    .auth-sub{font-size:14px;color:#8a8070;font-weight:300;line-height:1.7;margin-bottom:32px;}
+    .auth-tabs{display:flex;background:rgba(255,255,255,0.04);border:1px solid rgba(212,175,55,0.15);border-radius:10px;overflow:hidden;margin-bottom:28px;}
+    .auth-tab{flex:1;background:transparent;border:none;padding:14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#5a5040;cursor:pointer;transition:all 0.3s;}
+    .auth-tab.active{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.08));color:#d4af37;border-bottom:2px solid #d4af37;}
+    .auth-field{margin-bottom:16px;text-align:left;}
+    .auth-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#5a5040;margin-bottom:8px;display:block;font-weight:600;}
+    .auth-input{width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:15px;color:#f5f0e8;outline:none;box-sizing:border-box;transition:border 0.2s;}
+    .auth-input:focus{border-color:rgba(212,175,55,0.6);}
+    .auth-input::placeholder{color:#3a3028;}
+    .auth-btn{width:100%;background:linear-gradient(135deg,#d4af37,#e8c84a);border:none;padding:18px 32px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.5px;color:#0a0a0f;cursor:pointer;transition:all 0.3s;margin-top:4px;}
+    .auth-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(212,175,55,0.35);}
+    .auth-btn:disabled{background:#4a4538;color:#2a2520;cursor:not-allowed;transform:none;box-shadow:none;}
+    .auth-err{font-size:13px;color:#e06060;margin-top:12px;min-height:18px;text-align:center;}
+    .auth-ok{font-size:13px;color:#60c080;margin-top:12px;min-height:18px;text-align:center;}
+    .auth-pricebox{background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.25);border-radius:16px;padding:22px 28px;margin-bottom:24px;}
+    .auth-pricelbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#6a6048;margin-bottom:8px;}
+    .auth-price{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:#f5f0e8;line-height:1;}
+    .auth-price sup{font-size:20px;color:#d4af37;}
+    .auth-pricenote{font-size:12px;color:#5a5040;margin-top:6px;}
+    .auth-pay-btn{width:100%;background:linear-gradient(135deg,#d4af37,#e8c84a);border:none;padding:18px 32px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:#0a0a0f;cursor:pointer;transition:all 0.3s;margin-bottom:12px;}
+    .auth-pay-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(212,175,55,0.35);}
+    .auth-secure{font-size:12px;color:#3a3428;}
+    .auth-spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(10,10,15,0.3);border-top-color:#0a0a0f;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;}
+    /* RECEIPT */
+    .receipt-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99998;display:none;align-items:center;justify-content:center;padding:20px;}
+    .receipt-overlay.open{display:flex;}
+    .receipt-box{background:#0f0f1a;border:1px solid rgba(212,175,55,0.3);border-radius:20px;max-width:500px;width:100%;overflow:hidden;position:relative;max-height:90vh;overflow-y:auto;}
+    .receipt-header{background:linear-gradient(135deg,#0a0a0f,#1a1a2e);padding:28px 32px;text-align:center;border-bottom:2px solid #d4af37;}
+    .receipt-brand{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#d4af37;letter-spacing:3px;}
+    .receipt-title-lbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#6a6048;margin-top:2px;}
+    .receipt-meta{padding:20px 28px;border-bottom:1px solid rgba(212,175,55,0.1);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+    .receipt-meta-item .lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#6a6048;margin-bottom:4px;}
+    .receipt-meta-item .val{font-size:13px;color:#d4af37;font-weight:700;letter-spacing:1px;}
+    .receipt-items{padding:20px 28px;border-bottom:1px solid rgba(212,175,55,0.1);}
+    .receipt-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;}
+    .receipt-item-name{color:#f5f0e8;font-size:14px;font-weight:600;}
+    .receipt-item-sub{color:#6a6048;font-size:12px;margin-top:2px;}
+    .receipt-item-price{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#f5f0e8;}
+    .receipt-totals{padding:16px 28px;border-bottom:1px solid rgba(212,175,55,0.1);}
+    .receipt-total-row{display:flex;justify-content:space-between;padding:4px 0;font-size:13px;color:#6a6048;}
+    .receipt-total-row.big{color:#f5f0e8;font-size:16px;font-weight:700;margin-top:8px;padding-top:10px;border-top:1px solid rgba(212,175,55,0.2);}
+    .receipt-total-row.big .receipt-total-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#d4af37;}
+    .receipt-footer{padding:20px 28px;text-align:center;}
+    .receipt-close{background:transparent;border:1px solid rgba(212,175,55,0.2);color:#6a6048;padding:10px 28px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;width:100%;transition:all 0.2s;}
+    .receipt-close:hover{border-color:#d4af37;color:#d4af37;}
+    .receipt-close-x{position:absolute;top:14px;right:18px;background:none;border:none;color:#4a4038;font-size:20px;cursor:pointer;}
+    .receipt-print-btn{background:linear-gradient(135deg,#d4af37,#e8c84a);border:none;color:#0a0a0f;padding:12px 28px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px;width:100%;}
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>emailjs.init("URvsAP8DSUFFfJL9X");</script>
@@ -212,49 +267,45 @@
 
 
 <!-- PAYWALL -->
-<div id="paywallScreen">
-  <div class="pw-box">
-    <span class="pw-eye">Global Real Estate Intelligence</span>
-    <h2 class="pw-title">Average House<br><span>Prices</span></h2>
-    <p class="pw-sub">Instant access to property prices across 150+ cities worldwide, sourced from Numbeo, Knight Frank, Statista &amp; more.</p>
-    <div class="pw-feats">
-      <div class="pw-feat"><div class="pw-feat-ico">&#127758;</div><div class="pw-feat-txt"><b>150+ Cities Worldwide</b>Africa, Americas, Europe, Asia &amp; Middle East</div></div>
-      <div class="pw-feat"><div class="pw-feat-ico">&#128177;</div><div class="pw-feat-txt"><b>Correct Currency Symbols</b>&#8358;, &yen;, &#8377;, &pound;, &euro; &mdash; always local money</div></div>
-      <div class="pw-feat"><div class="pw-feat-ico">&#128202;</div><div class="pw-feat-txt"><b>Full Market Stats + Chart</b>Range, per m&sup2;, trend, history &amp; currency converter</div></div>
-      <div class="pw-feat"><div class="pw-feat-ico">&#9854;</div><div class="pw-feat-txt"><b>Lifetime Access</b>Pay once, use forever. No subscriptions.</div></div>
+<!-- AUTH SCREEN -->
+<div id="authScreen">
+  <div class="auth-box">
+    <span class="auth-eye">Global Real Estate Intelligence</span>
+    <h2 class="auth-title">Average House<br><span>Prices</span></h2>
+    <p class="auth-sub">150+ cities worldwide — in local currency. Sign in or create an account to get started.</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
     </div>
-    <div class="pw-pricebox">
-      <div class="pw-pricelbl">One-Time Payment &bull; Lifetime Access</div>
-      <div class="pw-price"><sup>$</sup>0.99</div>
-      <div class="pw-pricenote">No subscriptions &bull; Instant unlock &bull; Secured by Stripe</div>
+    <div id="loginPanel">
+      <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" id="loginEmail" type="email" placeholder="your@email.com" autocomplete="email"></div>
+      <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="auth-btn" id="loginBtn" onclick="doLogin()">&#128274; Sign In</button>
+      <div class="auth-err" id="loginErr"></div>
     </div>
-    <button class="pw-btn" id="payBtn">&#128274; Unlock for $0.99 &mdash; Pay with Card</button>
-    <div class="pw-secure">&#128274; Secured by Stripe &bull; 256-bit SSL</div>
-    <div class="pw-code-section">
-      <div class="pw-code-label">Already paid? Enter your access code</div>
-      <div class="pw-code-row">
-        <input class="pw-code-input" id="codeInput" placeholder="e.g. HP-A3K9X2" maxlength="9">
-        <button class="pw-code-btn" id="codeUnlockBtn">Unlock</button>
+    <div id="signupPanel" style="display:none;">
+      <div class="auth-pricebox">
+        <div class="auth-pricelbl">One-Time Payment &bull; Lifetime Access</div>
+        <div class="auth-price"><sup>$</sup>0.99</div>
+        <div class="auth-pricenote">No subscriptions &bull; Instant unlock &bull; Secured by Stripe</div>
       </div>
-      <div class="pw-code-err" id="codeErr"></div>
+      <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" id="signupEmail" type="email" placeholder="your@email.com" autocomplete="email"></div>
+      <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" id="signupPass" type="password" placeholder="Min 6 characters" autocomplete="new-password"></div>
+      <div class="auth-field"><label class="auth-label">Confirm Password</label><input class="auth-input" id="signupPass2" type="password" placeholder="Repeat password" autocomplete="new-password"></div>
+      <button class="auth-pay-btn" id="signupPayBtn" onclick="doSignupAndPay()">&#128274; Create Account &amp; Pay $0.99</button>
+      <div class="auth-err" id="signupErr"></div>
+      <div class="auth-ok" id="signupOk"></div>
+      <div class="auth-secure">&#128274; Secured by Stripe &bull; 256-bit SSL</div>
     </div>
   </div>
-</div>
-
-<!-- ACCESS CODE OVERLAY -->
-<div id="accessCodeBox">
-  <div class="ac-title">&#127775; Your Personal Access Code &#127775;</div>
-  <div class="ac-value" id="acValue"></div>
-  <div class="ac-note"><strong>Save this code!</strong><br>Use it to unlock HousePricer on any device, any browser, anytime — even if you clear your cache.</div>
-  <button class="ac-ok" id="acOkBtn" disabled>Got it — I saved my code &nbsp;<span id="acCountdown">10</span></button>
 </div>
 
 <!-- APP -->
 <div id="appScreen">
   <div class="app">
     <div class="unlocked-bar">
-      <span>&#9989; <b>Access Unlocked</b> — Welcome! You have lifetime access.</span>
-      <button class="code-btn-sm" id="myCodeBtn">&#128273; My Access Code</button>
+      <span>&#9989; <b>Access Unlocked</b> — Welcome, <span id="userEmail" style="color:#d4af37;"></span>!</span>
+      <button onclick="showReceipt()" style="background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);color:#d4af37;padding:6px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-right:6px;">&#128424; Receipt</button><button onclick="doLogout()" style="background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.2);color:#e06060;padding:6px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;">Sign Out</button>
     </div>
 
     <!-- CODE MODAL -->
@@ -439,9 +490,10 @@ function isValidCode(input) {
 // UNLOCK / LOCK
 // ════════════════════════════════════════
 function unlockApp() {
-  document.getElementById('paywallScreen').style.display = 'none';
-  document.getElementById('accessCodeBox').style.display = 'none';
+  var auth = document.getElementById('authScreen');
+  if(auth) auth.style.display = 'none';
   document.getElementById('appScreen').style.display = 'block';
+  var uel = document.getElementById('userEmail'); if(uel) uel.textContent = localStorage.getItem('hp_email')||'';
 }
 function showCodeOverlay() {
   var code = getTodayCode();
@@ -465,46 +517,21 @@ function showCodeOverlay() {
 // ════════════════════════════════════════
 // INIT — runs after page loads
 // ════════════════════════════════════════
-window.addEventListener('load', function() {
+window.addEventListener('load', async function() {
   var _initFavs=(function(){try{return JSON.parse(localStorage.getItem('hp_favs')||'[]');}catch(e){return[];}})();
   var _badge=document.getElementById('favBadge');
   if(_badge&&_initFavs.length){_badge.textContent=_initFavs.length;_badge.style.display='inline';}
-  if (localStorage.getItem('hp_unlocked') === '1') {
+  if (window.location.search.indexOf('paid=1') !== -1) {
+    await handlePostPayment();
+  }
+  if (localStorage.getItem('hp_authed') === '1') {
     unlockApp();
-  } else if (window.location.search.indexOf('paid=1') !== -1) {
-    localStorage.setItem('hp_unlocked', '1');
-    showCodeOverlay();
-    // Show email receipt modal after short delay
-    setTimeout(function() {
-      document.getElementById('emailModal').style.display = 'flex';
-    }, 1500);
+  } else {
+    document.getElementById('authScreen').style.display = 'flex';
   }
 });
 
-// ════════════════════════════════════════
-// PAYWALL EVENTS
-// ════════════════════════════════════════
-document.getElementById('payBtn').addEventListener('click', function() {
-  window.location.href = 'https://buy.stripe.com/9B69AS4XR2Mt3lz5abcfK01';
-});
-document.getElementById('codeUnlockBtn').addEventListener('click', function() {
-  var val = document.getElementById('codeInput').value;
-  var err = document.getElementById('codeErr');
-  if (!val) { err.textContent = 'Please enter your code.'; return; }
-  if (isValidCode(val)) {
-    localStorage.setItem('hp_unlocked', '1');
-    err.textContent = '';
-    unlockApp();
-  } else {
-    err.textContent = 'Invalid code. Try again.';
-  }
-});
-document.getElementById('codeInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') document.getElementById('codeUnlockBtn').click();
-});
-document.getElementById('acOkBtn').addEventListener('click', function() {
-  if (!this.disabled) unlockApp();
-});
+// Auth via Supabase — see doLogin/doSignupAndPay below
 
 // ════════════════════════════════════════
 // CODE MODAL
@@ -999,7 +1026,150 @@ function rmFav(city) {
   document.getElementById('skipReceiptBtn').addEventListener('click', function() {
     document.getElementById('emailModal').style.display = 'none';
   });
+
+// ════════════════════════════════════════
+// SUPABASE AUTH
+// ════════════════════════════════════════
+var SUPA_URL = 'https://cpkblfzkyztkwtutigka.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwa2JsZnpreXp0a3d0dXRpZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNzA0MDgsImV4cCI6MjA5MDk0NjQwOH0.bhtzeA1o0WiZ8ggEZ7r0JrOCTAFIa-z1Kn_7fnElPE8';
+
+async function supaFetch(path, method, body) {
+  var res = await fetch(SUPA_URL + path, {
+    method: method || 'GET',
+    headers: {'apikey': SUPA_KEY,'Authorization': 'Bearer ' + SUPA_KEY,'Content-Type': 'application/json','Prefer': 'return=representation'},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  var data = await res.json();
+  return { ok: res.ok, status: res.status, data };
+}
+
+async function hashPassword(pass) {
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function switchTab(tab) {
+  document.getElementById('loginPanel').style.display = tab==='login'?'block':'none';
+  document.getElementById('signupPanel').style.display = tab==='signup'?'block':'none';
+  document.getElementById('tabLogin').classList.toggle('active', tab==='login');
+  document.getElementById('tabSignup').classList.toggle('active', tab==='signup');
+}
+
+async function doLogin() {
+  var email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  var pass = document.getElementById('loginPass').value;
+  var err = document.getElementById('loginErr');
+  var btn = document.getElementById('loginBtn');
+  err.textContent = '';
+  if (!email || !pass) { err.textContent = 'Please fill in all fields.'; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="auth-spinner"></span>Signing in...';
+  try {
+    var hash = await hashPassword(pass);
+    var res = await supaFetch('/rest/v1/users?email=eq.' + encodeURIComponent(email) + '&password_hash=eq.' + hash + '&select=email,paid', 'GET');
+    if (!res.ok || !res.data || res.data.length === 0) {
+      err.textContent = 'Wrong email or password.';
+    } else if (!res.data[0].paid) {
+      err.textContent = 'Payment not completed. Please sign up and pay.';
+      switchTab('signup');
+    } else {
+      localStorage.setItem('hp_email', email);
+      localStorage.setItem('hp_authed', '1');
+      unlockApp();
+    }
+  } catch(e) { err.textContent = 'Connection error. Try again.'; }
+  btn.disabled = false; btn.innerHTML = '&#128274; Sign In';
+}
+
+async function doSignupAndPay() {
+  var email = document.getElementById('signupEmail').value.trim().toLowerCase();
+  var pass = document.getElementById('signupPass').value;
+  var pass2 = document.getElementById('signupPass2').value;
+  var err = document.getElementById('signupErr');
+  var btn = document.getElementById('signupPayBtn');
+  err.textContent = '';
+  if (!email||!pass||!pass2) { err.textContent='Please fill in all fields.'; return; }
+  if (!email.includes('@')) { err.textContent='Enter a valid email.'; return; }
+  if (pass.length < 6) { err.textContent='Password must be at least 6 characters.'; return; }
+  if (pass !== pass2) { err.textContent='Passwords do not match.'; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="auth-spinner"></span>Creating account...';
+  try {
+    var hash = await hashPassword(pass);
+    var check = await supaFetch('/rest/v1/users?email=eq.' + encodeURIComponent(email) + '&select=email,paid', 'GET');
+    if (check.ok && check.data && check.data.length > 0 && check.data[0].paid) {
+      err.textContent = 'Account already exists. Sign in instead.';
+      btn.disabled = false; btn.innerHTML = '&#128274; Create Account & Pay $0.99'; return;
+    }
+    if (!check.ok || !check.data || check.data.length === 0) {
+      var insert = await supaFetch('/rest/v1/users', 'POST', {email:email,password_hash:hash,paid:false});
+      if (!insert.ok && insert.status !== 409) {
+        err.textContent = 'Failed to create account. Try again.';
+        btn.disabled = false; btn.innerHTML = '&#128274; Create Account & Pay $0.99'; return;
+      }
+    }
+    localStorage.setItem('hp_pending_email', email);
+    window.location.href = 'https://buy.stripe.com/9B69AS4XR2Mt3lz5abcfK01';
+  } catch(e) { err.textContent = 'Connection error. Try again.'; btn.disabled=false; btn.innerHTML='&#128274; Create Account & Pay $0.99'; }
+}
+
+async function handlePostPayment() {
+  var email = localStorage.getItem('hp_pending_email');
+  if (!email) return;
+  await supaFetch('/rest/v1/users?email=eq.' + encodeURIComponent(email), 'PATCH', {paid:true});
+  localStorage.setItem('hp_email', email);
+  localStorage.setItem('hp_authed', '1');
+  localStorage.setItem('hp_purchase_date', new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}));
+  localStorage.removeItem('hp_pending_email');
+}
+
+function doLogout() {
+  localStorage.removeItem('hp_authed');
+  localStorage.removeItem('hp_email');
+  document.getElementById('appScreen').style.display = 'none';
+  document.getElementById('authScreen').style.display = 'flex';
+}
+
+function showReceipt() {
+  var email = localStorage.getItem('hp_email') || '—';
+  var date = localStorage.getItem('hp_purchase_date') || new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'});
+  document.getElementById('receiptEmail').textContent = email;
+  document.getElementById('receiptDate').textContent = date;
+  document.getElementById('receiptModal').classList.add('open');
+}
+
 </script>
+
+
+<!-- RECEIPT MODAL -->
+<div class="receipt-overlay" id="receiptModal">
+  <div class="receipt-box">
+    <button class="receipt-close-x" onclick="document.getElementById('receiptModal').classList.remove('open')">&#10005;</button>
+    <div class="receipt-header">
+      <div style="font-size:28px;margin-bottom:4px;">🏠</div>
+      <div class="receipt-brand">HOUSEPRICER</div>
+      <div class="receipt-title-lbl">Payment Receipt</div>
+    </div>
+    <div class="receipt-meta">
+      <div class="receipt-meta-item"><div class="lbl">Account</div><div class="val" id="receiptEmail">—</div></div>
+      <div class="receipt-meta-item"><div class="lbl">Date</div><div class="val" id="receiptDate">—</div></div>
+      <div class="receipt-meta-item"><div class="lbl">Status</div><div class="val" style="color:#60c080;">&#10003; Paid</div></div>
+    </div>
+    <div class="receipt-items">
+      <div class="receipt-row">
+        <div><div class="receipt-item-name">HousePricer</div><div class="receipt-item-sub">Lifetime Access — 150+ Cities, 60+ Currencies</div></div>
+        <div class="receipt-item-price">$0.99</div>
+      </div>
+    </div>
+    <div class="receipt-totals">
+      <div class="receipt-total-row"><span>Subtotal</span><span>$0.99</span></div>
+      <div class="receipt-total-row"><span>Tax</span><span>$0.00</span></div>
+      <div class="receipt-total-row big"><span>Total</span><span class="receipt-total-val">$0.99</span></div>
+    </div>
+    <div class="receipt-footer">
+      <button class="receipt-print-btn" onclick="window.print()">&#128438; Print / Save as PDF</button>
+      <button class="receipt-close" onclick="document.getElementById('receiptModal').classList.remove('open')">Close</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
