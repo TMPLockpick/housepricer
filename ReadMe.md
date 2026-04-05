@@ -37,3 +37,7 @@ HousePricer uses a one-time paywall model. Pay once, get lifetime access. No mon
 *Data is estimated and sourced from multiple public market intelligence platforms. Always verify with a local real estate professional before making financial decisions.*
 
 ---
+
+
+## Auth
+Email + password login powered by Supabase. Users sign up, pay $0.99 via Stripe, then get lifetime access.
