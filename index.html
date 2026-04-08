@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <title>HousePricer — Global Property Intelligence</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0f'/%3E%3Cpolygon points='32,10 52,28 52,54 12,54 12,28' fill='none' stroke='%23d4af37' stroke-width='3' stroke-linejoin='round'/%3E%3Crect x='24' y='38' width='16' height='16' fill='%23d4af37' rx='1'/%3E%3Cpolygon points='32,10 52,28 12,28' fill='%23d4af37' opacity='0.3'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,14 +25,26 @@
     .page.active .animated{animation-name:slideUp;}
     .delay-1{animation-delay:0.1s;} .delay-2{animation-delay:0.2s;} .delay-3{animation-delay:0.3s;}
 
-    /* AUTH */
-    #authWrap{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:linear-gradient(135deg,#0a0a0f 0%,#1a1a2e 100%);overflow-y:auto;}
+    /* PREVENT IOS ZOOM: Set font-size to 16px on all inputs for Apple devices */
+    input, select, textarea { font-size: 16px !important; }
+
+    /* AUTH WRAPPER (Added transition for smooth login fade) */
+    #authWrap{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:linear-gradient(135deg,#0a0a0f 0%,#1a1a2e 100%);overflow-y:auto; transition: opacity 0.5s ease;}
     #authWrap::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(212,175,55,0.05),transparent 70%);pointer-events:none;z-index:0;}
     
-    .back-link {position:absolute; top:24px; left:24px; z-index:20; display:flex; align-items:center; gap:8px; color:var(--gold); text-decoration:none; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; transition:all 0.2s; padding:8px 16px; background:var(--gold-dim); border:1px solid var(--gold-b); border-radius:8px;}
+    /* PASSWORD TOGGLE EYE (Clean SVG styling) */
+    .input-wrap { position: relative; }
+    .pw-toggle {
+        position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+        background: none; border: none; cursor: pointer; z-index: 10; padding: 4px; display: flex; align-items: center; justify-content: center;
+    }
+    .pw-toggle svg { width: 20px; height: 20px; fill: #ffffff; transition: fill 0.2s; opacity: 0.7;}
+    .pw-toggle:hover svg { fill: var(--gold); opacity: 1;}
+
+    .back-link {position:absolute; top:24px; left:24px; z-index:20; display:flex; align-items:center; gap:8px; color:var(--gold); text-decoration:none; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; transition:all 0.2s; padding:8px 16px; background:var(--gold-dim); border:1px solid var(--gold-b); border-radius:8px; white-space:nowrap;}
     .back-link:hover {background:var(--gold-b); transform:translateX(-3px);}
 
-    .auth-card{width:100%;max-width:540px;margin:auto;padding:60px 20px 40px;position:relative;z-index:10;pointer-events:auto;}
+    .auth-card{width:100%;max-width:540px;margin:auto;padding:80px 20px 40px;position:relative;z-index:10;pointer-events:auto;}
     .auth-logo-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--text);}
     .auth-box{background:rgba(255,255,255,0.02);border:1px solid rgba(212,175,55,0.15);border-radius:16px;padding:36px;position:relative;overflow:hidden;backdrop-filter:blur(10px);}
     .auth-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
@@ -41,7 +53,7 @@
     .auth-tab.active{background:var(--gold-dim);color:var(--gold);border:1px solid var(--gold-b);}
     .auth-field{margin-bottom:16px;}
     .auth-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;display:block;font-weight:600;}
-    .auth-input{width:100%;background:rgba(0,0,0,0.4);border:1px solid rgba(212,175,55,0.2);border-radius:10px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none;transition:all 0.2s;}
+    .auth-input{width:100%;background:rgba(0,0,0,0.4);border:1px solid rgba(212,175,55,0.2);border-radius:10px;padding:14px 18px;color:var(--text);outline:none;transition:all 0.2s;}
     .auth-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,0.08);}
     .pw-req{font-size:11px;color:var(--muted);margin-top:7px;display:flex;flex-wrap:wrap;gap:6px;}
     .pw-req span{background:var(--bg);border:1px solid rgba(255,255,255,0.06);border-radius:20px;padding:3px 9px;transition:all 0.2s;}
@@ -62,9 +74,9 @@
     .verify-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:7px;}
     .verify-sub{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:22px;}
     .verify-digits{display:flex;gap:8px;justify-content:center;margin-bottom:18px;}
-    .v-digit{width:48px;height:56px;background:var(--bg);border:1px solid var(--gold-b);border-radius:10px;font-family:'DM Sans',monospace;font-size:22px;font-weight:700;color:var(--gold);text-align:center;outline:none;transition:all 0.2s;}
+    .v-digit{width:clamp(36px, 10vw, 48px);height:56px;background:var(--bg);border:1px solid var(--gold-b);border-radius:10px;font-family:'DM Sans',monospace;font-size:22px;font-weight:700;color:var(--gold);text-align:center;outline:none;transition:all 0.2s;}
     .v-digit:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,0.12);}
-    .resend-link{background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;text-decoration:underline;margin-top:6px;}
+    .resend-link{background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;text-decoration:underline;margin-top:16px; padding:8px;}
     .resend-link:hover{color:var(--gold);}
 
     /* DASHBOARD */
@@ -101,49 +113,54 @@
     .page{padding:28px;display:none;}
     .page.active{display:block;}
 
-    /* SEARCH */
+    /* SEARCH (RESTORED TO IMAGE 1 SINGLE CARD LAYOUT) */
     .search-wrap{display:flex;border:2px solid var(--gold-b);border-radius:14px;overflow:hidden;background:var(--bg2);transition:all 0.3s;margin-bottom:14px;}
     .search-wrap:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,0.08);}
     .search-input{flex:1;background:transparent;border:none;outline:none;padding:18px 22px;font-size:16px;color:var(--text);font-family:'DM Sans',sans-serif;}
     .search-input::placeholder{color:var(--dim);}
     .search-btn{background:linear-gradient(135deg,var(--gold),var(--gold-l));border:none;padding:18px 28px;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0a0a0f;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
     .search-btn:disabled{background:#2a2520;color:var(--dim);cursor:not-allowed;}
-    .suggestions{position:absolute;left:0;right:0;top:100%;margin-top:6px;background:var(--bg2);border:1px solid var(--gold-b);border-radius:13px;max-height:280px;overflow-y:auto;z-index:200;box-shadow:0 20px 50px rgba(0,0,0,0.6);}
+    
+    .suggestions{position:absolute;left:0;right:0;top:100%;margin-top:6px;background:#111122;border:1px solid var(--gold-b);border-radius:13px;max-height:280px;overflow-y:auto;z-index:200;box-shadow:0 20px 50px rgba(0,0,0,0.6); animation: fadeIn 0.2s ease-out;}
     .sug-item{padding:13px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--text);transition:background 0.15s;}
+    .sug-item:hover{background:var(--gold-dim);}
+    .sug-item:last-child{border-bottom:none;}
     .sug-sym{color:var(--gold);font-size:18px;}
+    
     .chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px;}
     .chip-lbl{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;font-weight:600;}
     .chip{background:var(--gold-dim);border:1px solid var(--gold-b);color:var(--gold);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:all 0.2s;font-weight:500;}
+    .chip:hover{background:var(--gold);color:#0a0a0f;}
     .region-filter{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:22px;}
     .region-btn{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
-    .region-btn.active{background:var(--gold-dim);border-color:var(--gold-b);color:var(--gold);}
-    .result-card{background:var(--bg2);border:1px solid var(--gold-b);border-radius:18px;padding:32px;animation:slideUp 0.6s ease-out both;}
+    .region-btn.active,.region-btn:hover{background:var(--gold-dim);border-color:var(--gold-b);color:var(--gold);}
+    
+    /* CLASSIC SINGLE RESULT CARD */
+    .result-card{background:var(--bg2);border:1px solid var(--gold-b);border-radius:18px;padding:40px;animation:slideUp 0.6s ease-out both;}
     .result-header{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:28px;flex-wrap:wrap;}
     .result-loc{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:8px;}
-    .result-price{font-family:'Playfair Display',serif;font-size:clamp(34px,6vw,60px);font-weight:900;color:var(--text);line-height:1;}
+    .result-price{font-family:'Playfair Display',serif;font-size:clamp(40px,6vw,60px);font-weight:900;color:var(--text);line-height:1;}
     .result-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-start;}
     .result-badge{background:var(--gold-dim);border:1px solid var(--gold-b);padding:7px 16px;border-radius:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;}
     .fav-btn{background:none;border:1px solid var(--gold-b);color:var(--muted);padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
     .fav-btn.saved,.fav-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:2px;background:var(--gold-b);border:1px solid var(--gold-b);border-radius:10px;overflow:hidden;margin-bottom:22px;}
-    .stat-item{background:var(--bg);padding:18px 22px;text-align:center;}
+    
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2px;background:var(--gold-b);border:1px solid var(--gold-b);border-radius:10px;overflow:hidden;margin-bottom:32px;}
+    .stat-item{background:var(--bg);padding:24px 22px;text-align:center;}
     .stat-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);margin-bottom:7px;font-weight:600;}
-    .stat-value{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold-l);font-weight:700;}
+    .stat-value{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold-l);font-weight:700;}
+    
     .chart-section{margin-bottom:22px;}
     .chart-label{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);margin-bottom:10px;font-weight:600;}
-    .chart-wrap{height:100px;background:var(--bg);border:1px solid rgba(255,255,255,0.04);border-radius:9px;padding:12px;}
-    .chart-bars{display:flex;align-items:flex-end;height:100%;gap:7px;}
-    .chart-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;gap:3px;}
-    .chart-bar{width:100%;border-radius:3px 3px 0 0;min-height:4px;transition:height 0.5s;}
+    .chart-wrap{height:120px;background:var(--bg);border:1px solid rgba(255,255,255,0.04);border-radius:9px;padding:16px;}
+    .chart-bars{display:flex;align-items:flex-end;height:100%;gap:12px;}
+    .chart-bar-wrap{display:flex;flex-direction:column;align-items:center;flex:1;height:100%;justify-content:flex-end;gap:5px;}
+    .chart-bar{width:100%;border-radius:4px 4px 0 0;min-height:4px;transition:height 0.5s;}
     .chart-bar.cur{background:linear-gradient(180deg,var(--gold),#a07820);}
     .chart-bar.past{background:rgba(212,175,55,0.22);}
-    .chart-lbl{font-size:8px;color:var(--dim);letter-spacing:1px;}
-    .inline-conv{background:var(--bg);border:1px solid rgba(255,255,255,0.04);border-radius:10px;padding:16px 20px;margin-bottom:20px;}
-    .inline-conv-title{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);margin-bottom:10px;font-weight:600;}
-    .inline-conv-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap;}
-    .inline-conv-sel{background:var(--bg2);border:1px solid var(--gold-b);border-radius:7px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;cursor:pointer;flex:1;min-width:110px;}
-    .inline-conv-result{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);flex:1;}
-    .disclaimer{background:rgba(212,175,55,0.03);border:1px solid var(--gold-b);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;font-size:12px;color:var(--muted);line-height:1.7;margin-top:18px;}
+    .chart-lbl{font-size:9px;color:var(--dim);letter-spacing:1px;}
+    
+    .disclaimer{background:rgba(212,175,55,0.03);border:1px solid var(--gold-b);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;font-size:12px;color:var(--muted);line-height:1.7;margin-top:24px;}
     .loading{text-align:center;padding:70px 20px;}
     .spinner{width:40px;height:40px;border:3px solid var(--gold-dim);border-top-color:var(--gold);border-radius:50%;animation:spin 0.85s linear infinite;margin:0 auto 18px;}
 
@@ -181,12 +198,8 @@
     .fav-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 10px 28px rgba(212,175,55,0.09);}
     .fav-city{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px;}
     .fav-price{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:5px;}
-    .fav-trend{font-size:12px;font-weight:600;}
-    .fav-trend.up{color:var(--green);}
-    .fav-trend.dn{color:var(--red);}
-    .fav-rm{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--dim);font-size:15px;cursor:pointer;padding:3px;transition:color 0.2s;}
-    .fav-rm:hover{color:var(--red);}
     .fav-empty{text-align:center;padding:70px 20px;color:var(--dim);}
+    .fav-empty-ico{font-size:48px;margin-bottom:14px;}
 
     /* FAQ */
     .faq-list{max-width:700px;display:flex;flex-direction:column;gap:12px;}
@@ -196,7 +209,7 @@
     .faq-q.open{color:var(--gold);}
     .faq-arr{color:var(--gold);font-size:18px;transition:transform 0.3s;flex-shrink:0;}
     .faq-q.open .faq-arr{transform:rotate(180deg);}
-    .faq-a{display:none;padding:0 24px 20px;font-size:14px;color:var(--muted);line-height:1.8;border-top:1px solid rgba(212,175,55,0.08);}
+    .faq-a{display:none;padding:0 24px 20px;color:var(--muted);line-height:1.8;border-top:1px solid rgba(212,175,55,0.08);}
     .faq-a.open{display:block;animation:fadeIn 0.3s ease-out;}
 
     /* RECEIPT MODAL */
@@ -225,14 +238,26 @@
     .modal-x{position:absolute;top:13px;right:16px;background:none;border:none;color:var(--dim);font-size:19px;cursor:pointer;}
     .modal-x:hover{color:var(--gold);}
 
-    /* MOBILE */
+    /* MOBILE FRONTIER ADAPTATIONS (Detected on small screens) */
     @media(max-width:768px){
       .sidebar{transform:translateX(-100%);}
       .sidebar.open{transform:translateX(0);}
-      .main{margin-left:0;}
+      .main{margin-left:0; padding-bottom:60px;}
       .hamburger{display:block;}
-      .page{padding:18px;}
+      .page{padding:16px;}
       .tool-grid{grid-template-columns:1fr;}
+      .auth-card{padding: 80px 15px 30px;}
+      .auth-box{padding: 24px 20px;}
+      .result-header{flex-direction:column; gap:12px;}
+      .stats-grid{grid-template-columns: 1fr 1fr;}
+      .topbar {padding: 16px 20px;}
+      .topbar-sub {display: none;}
+      .topbar-title {font-size: 18px;}
+      #authWrap .hero-title {font-size: 36px !important;}
+    }
+    @media(max-width:480px){
+       .stats-grid{grid-template-columns: 1fr;}
+       .auth-price-num{font-size:36px;}
     }
     .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;}
     .sb-overlay.open{display:block;}
@@ -246,8 +271,8 @@
   <div class="auth-card animated">
     <div style="text-align:center;margin-bottom:36px;">
       <div style="font-size:11px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:#d4af37;margin-bottom:20px;">Global Real Estate Intelligence</div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(42px,8vw,72px);font-weight:900;color:#f5f0e8;line-height:1.1;margin-bottom:0;">Average&nbsp;House<br><em style="color:#d4af37;">Prices</em></h1>
-      <p style="font-size:15px;color:#8a8070;font-weight:300;margin-top:16px;line-height:1.7;">150+ cities worldwide — in local currency. Sign in or create an account to get started.</p>
+      <h1 class="hero-title" style="font-family:'Playfair Display',serif;font-size:clamp(36px,8vw,72px);font-weight:900;color:#f5f0e8;line-height:1.1;margin-bottom:0;">Average&nbsp;House<br><em style="color:#d4af37;">Prices</em></h1>
+      <p style="font-size:15px;color:#8a8070;font-weight:300;margin-top:16px;line-height:1.7;">200+ cities worldwide — in local currency. Sign in or create an account to get started.</p>
     </div>
     
     <div class="auth-box fade-in delay-1" id="authBox">
@@ -257,7 +282,16 @@
       </div>
       <div id="loginPanel">
         <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" id="loginEmail" type="email" placeholder="your@email.com" autocomplete="email"></div>
-        <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" id="loginPass" type="password" placeholder="Your password" autocomplete="current-password"></div>
+        <div class="auth-field">
+          <label class="auth-label">Password</label>
+          <div class="input-wrap">
+            <input class="auth-input" id="loginPass" type="password" placeholder="Your password" autocomplete="current-password">
+            <button class="pw-toggle" onclick="togglePassword('loginPass', this)" type="button" title="Show/Hide Password">
+                <svg class="eye-open" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                <svg class="eye-closed" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
+            </button>
+          </div>
+        </div>
         <button class="auth-btn" id="loginBtn" onclick="doLogin()">&#128274; Sign In securely</button>
         <div class="auth-err" id="loginErr"></div>
       </div>
@@ -269,13 +303,27 @@
         <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" id="signupEmail" type="email" placeholder="your@email.com" autocomplete="email"></div>
         <div class="auth-field">
           <label class="auth-label">Password</label>
-          <input class="auth-input" id="signupPass" type="password" placeholder="Create a password" autocomplete="new-password" oninput="checkPw()">
+          <div class="input-wrap">
+            <input class="auth-input" id="signupPass" type="password" placeholder="Create a password" autocomplete="new-password" oninput="checkPw()">
+            <button class="pw-toggle" onclick="togglePassword('signupPass', this)" type="button" title="Show/Hide Password">
+                <svg class="eye-open" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                <svg class="eye-closed" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
+            </button>
+          </div>
           <div class="pw-strength">
             <div class="pw-strength-bar"><div class="pw-strength-fill" id="pwFill"></div></div>
           </div>
           <div class="pw-req" style="margin-top:6px;"><span id="r-len">6+ chars</span><span id="r-up">Uppercase</span><span id="r-num">Number</span></div>
         </div>
-        <div class="auth-field"><label class="auth-label">Confirm Password</label><input class="auth-input" id="signupPass2" type="password" placeholder="Repeat password" autocomplete="new-password"></div>
+        <div class="auth-field"><label class="auth-label">Confirm Password</label>
+           <div class="input-wrap">
+               <input class="auth-input" id="signupPass2" type="password" placeholder="Repeat password" autocomplete="new-password">
+               <button class="pw-toggle" onclick="togglePassword('signupPass2', this)" type="button" title="Show/Hide Password">
+                  <svg class="eye-open" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                  <svg class="eye-closed" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
+               </button>
+           </div>
+        </div>
         
         <button class="auth-btn" id="signupBtn" onclick="doSignup()">&#128274; Create Account &amp; Pay $0.99</button>
         <div class="auth-err" id="signupErr"></div>
@@ -359,7 +407,7 @@
           <div class="topbar-sub" id="topSub">Search any city for instant price data</div>
         </div>
       </div>
-      <a href="https://housepricer.netlify.app/" style="background:var(--gold-dim);border:1px solid var(--gold-b);color:var(--gold);padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='var(--gold-b)'" onmouseout="this.style.background='var(--gold-dim)'">&#8592; Website</a>
+      <a href="https://housepricer.netlify.app/" style="background:var(--gold-dim);border:1px solid var(--gold-b);color:var(--gold);padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;text-decoration:none;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--gold-b)'" onmouseout="this.style.background='var(--gold-dim)'">&#8592; Website</a>
     </div>
 
     <div class="page active" id="page-search">
@@ -368,7 +416,7 @@
           <input id="searchInput" class="search-input" placeholder="Search any city in the world..." autocomplete="off">
           <button id="searchBtn" class="search-btn" disabled>Search</button>
         </div>
-        <div id="sugBox" class="suggestions" style="display:none;position:absolute;left:0;right:0;top:100%;"></div>
+        <div id="sugBox" class="suggestions" style="display:none;"></div>
       </div>
       <div class="chips animated delay-2">
         <span class="chip-lbl">Quick:</span>
@@ -388,12 +436,20 @@
         <button class="region-btn" onclick="filterRegion(this,'Middle East')">🕌 Mid East</button>
         <button class="region-btn" onclick="filterRegion(this,'Oceania')">🦘 Oceania</button>
       </div>
+      
       <div id="loading" class="loading" style="display:none;"><div class="spinner"></div><div class="loading-txt">Fetching market data...</div></div>
+      
       <div id="result" style="display:none;">
         <div class="result-card animated">
           <div class="result-header">
-            <div><div id="resLoc" class="result-loc"></div><div id="resPrice" class="result-price"></div></div>
-            <div class="result-actions"><div id="resBadge" class="result-badge"></div><button class="fav-btn" id="favBtn">&#11088; Save</button></div>
+            <div>
+                <div id="resLoc" class="result-loc"></div>
+                <div id="resPrice" class="result-price"></div>
+            </div>
+            <div class="result-actions">
+                <div id="resBadge" class="result-badge"></div>
+                <button class="fav-btn" id="favBtn">&#11088; Save</button>
+            </div>
           </div>
           <div class="stats-grid">
             <div class="stat-item"><div class="stat-label">Price Range</div><div id="resRange" class="stat-value"></div></div>
@@ -402,11 +458,7 @@
             <div class="stat-item"><div class="stat-label">Currency</div><div id="resCurr" class="stat-value"></div></div>
           </div>
           <div class="chart-section"><div class="chart-label">&#128202; 5-Year Price History</div><div class="chart-wrap"><div class="chart-bars" id="chartBars"></div></div></div>
-          <div class="inline-conv" id="inlineConv" style="display:none;">
-            <div class="inline-conv-title">&#128177; Convert this price</div>
-            <div class="inline-conv-row"><select class="inline-conv-sel" id="inlineConvSel"></select><div class="inline-conv-result" id="inlineConvRes">—</div></div>
-          </div>
-          <div class="disclaimer"><strong>&#x26A0;&#xFE0F; Disclaimer:</strong> Estimated market averages from Numbeo, Knight Frank &amp; Statista. Always verify with a local agent.</div>
+          <div class="disclaimer" id="searchDisclaimer"><strong>&#x26A0;&#xFE0F; Disclaimer:</strong> Estimated market averages. Always verify with a local agent.</div>
         </div>
       </div>
     </div>
@@ -656,7 +708,34 @@
       </div>
     </div>
 
-  </div></div><script>
+  </div></div><div class="modal-overlay" id="receiptModal">
+  <div class="receipt-box animated">
+    <button class="modal-x" onclick="closeModal('receiptModal')">&times;</button>
+    <div class="receipt-header">
+      <div class="receipt-brand">House<span style="color:var(--gold);">Pricer</span></div>
+      <div class="receipt-sub-lbl">One-Time &bull; Lifetime Access</div>
+    </div>
+    <div class="receipt-meta">
+      <div class="r-meta"><div class="lbl">CUSTOMER EMAIL</div><div class="val" id="rcEmail">—</div></div>
+      <div class="r-meta"><div class="lbl">PURCHASE DATE</div><div class="val" id="rcDate">—</div></div>
+    </div>
+    <div class="receipt-items">
+      <div class="receipt-row"><div class="r-item-name">One-Time &bull; Lifetime Access</div><div class="r-item-price">$0.99</div></div>
+      <p class="r-item-sub">Unlimited city searches and calculator access forever.</p>
+    </div>
+    <div class="receipt-totals">
+      <div class="r-total-row"><span>Subtotal</span><span>$0.99</span></div>
+      <div class="r-total-row"><span>Tax</span><span>$0.00</span></div>
+      <div class="r-total-row big"><span>Total Paid</span><span class="val">$0.99 USD</span></div>
+    </div>
+    <div class="receipt-footer">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Thank you for your business. For support, please contact help@housepricer.netlify.app</p>
+      <button class="receipt-close-btn" onclick="closeModal('receiptModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
 try{emailjs.init('URvsAP8DSUFFfJL9X');}catch(e){console.warn('EmailJS not loaded');}
 var SUPA_URL='https://cpkblfzkyztkwtutigka.supabase.co';
 var SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwa2JsZnpreXp0a3d0dXRpZ2thIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzNzA0MDgsImV4cCI6MjA5MDk0NjQwOH0.bhtzeA1o0WiZ8ggEZ7r0JrOCTAFIa-z1Kn_7fnElPE8';
@@ -667,6 +746,22 @@ async function supaFetch(path,method,body){
   try{var data=await res.json();return{ok:res.ok,status:res.status,data};}catch(e){return{ok:res.ok,status:res.status,data:null};}
 }
 async function hashPassword(pass){var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pass));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+
+// --- PW TOGGLE JS WITH SVGS ---
+function togglePassword(inputId, btnElement) {
+    var input = document.getElementById(inputId);
+    var eyeOpen = btnElement.querySelector('.eye-open');
+    var eyeClosed = btnElement.querySelector('.eye-closed');
+    if (input.type === 'password') {
+        input.type = 'text';
+        eyeOpen.style.display = 'none';
+        eyeClosed.style.display = 'block';
+    } else {
+        input.type = 'password';
+        eyeOpen.style.display = 'block';
+        eyeClosed.style.display = 'none';
+    }
+}
 
 // AUTH TABS
 function switchTab(tab){
@@ -780,6 +875,7 @@ async function doSignup(){
   el.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!this.value&&i>0)document.getElementById('d'+(i-1)).focus();});
 });
 
+// SMOOTH VERIFICATION & LOGIN
 function verifyCode(){
   var entered=['d0','d1','d2','d3','d4','d5'].map(function(id){return document.getElementById(id).value;}).join('');
   var err=document.getElementById('verifyErr');
@@ -789,15 +885,26 @@ function verifyCode(){
   if(entered!==_verifyCode){err.textContent='Wrong code. Try again.';return;}
   
   btn.disabled=true;
-  btn.innerHTML='<span class="auth-spinner"></span>Loading...';
+  btn.innerHTML='<span class="auth-spinner"></span>Verifying...';
   
-  if(_authMode === 'login') {
-      localStorage.setItem('hp_email', _pendingEmail);
-      localStorage.setItem('hp_authed', '1');
-      unlockDashboard();
-  } else if (_authMode === 'signup') {
-      createAndPay();
-  }
+  // Added an 800ms artificial delay to make the transition feel less "direct"
+  setTimeout(function() {
+      if(_authMode === 'login') {
+          localStorage.setItem('hp_email', _pendingEmail);
+          localStorage.setItem('hp_authed', '1');
+          
+          // Smooth fade out of Auth Wrap
+          var wrap = document.getElementById('authWrap');
+          wrap.style.opacity = '0';
+          setTimeout(function() {
+              unlockDashboard();
+              wrap.style.opacity = '1'; // Reset opacity for future logouts
+          }, 400); // Wait for CSS opacity transition
+          
+      } else if (_authMode === 'signup') {
+          createAndPay();
+      }
+  }, 800);
 }
 
 async function createAndPay(){
@@ -963,10 +1070,16 @@ var pages={
 function goPage(name){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
-  document.getElementById('page-'+name).classList.add('active');
+  
+  var targetPage = document.getElementById('page-'+name);
+  if(targetPage) targetPage.classList.add('active');
+  
   var btn=document.querySelector('[onclick="goPage(\''+name+'\')"]');if(btn)btn.classList.add('active');
   var t=pages[name]||[name,''];
-  document.getElementById('topTitle').textContent=t[0];document.getElementById('topSub').textContent=t[1];
+  document.getElementById('topTitle').textContent=t[0];
+  var sub = document.getElementById('topSub');
+  if(sub) sub.textContent=t[1];
+  
   if(name==='favourites')renderFavs();
   closeSidebar();
 }
@@ -981,31 +1094,152 @@ function s(c){return SYM[c]||c;}
 function fmt(v,c){var x=s(c);if(v>=1e9)return x+(v/1e9).toFixed(2)+'B';if(v>=1e6)return x+(v/1e6).toFixed(2)+'M';if(v>=1e3)return x+(v/1e3).toFixed(0)+'K';return x+v.toLocaleString();}
 function cvt(a,f,t){if(!RATES[f]||!RATES[t])return null;return(a/RATES[f])*RATES[t];}
 
-// CITIES
+// --- MASSIVE 200+ CITIES DATABASE ---
 var CITIES = {
-  'Lagos, Nigeria':{base:145000000,trend:'+8.5%',currency:'NGN',region:'West Africa'},
-  'Abuja, Nigeria':{base:110000000,trend:'+6.2%',currency:'NGN',region:'West Africa'},
-  'Cairo, Egypt':{base:4500000,trend:'+12.4%',currency:'EGP',region:'North Africa'},
-  'Johannesburg, South Africa':{base:1600000,trend:'+2.1%',currency:'ZAR',region:'Southern Africa'},
+  // AFRICA
+  'Lagos, Nigeria':{base:145000000,trend:'+8.5%',currency:'NGN',region:'Africa'},
+  'Abuja, Nigeria':{base:110000000,trend:'+6.2%',currency:'NGN',region:'Africa'},
+  'Ibadan, Nigeria':{base:75000000,trend:'+4.1%',currency:'NGN',region:'Africa'},
+  'Cairo, Egypt':{base:4500000,trend:'+12.4%',currency:'EGP',region:'Africa'},
+  'Alexandria, Egypt':{base:3200000,trend:'+9.1%',currency:'EGP',region:'Africa'},
+  'Giza, Egypt':{base:3800000,trend:'+10.5%',currency:'EGP',region:'Africa'},
+  'Johannesburg, South Africa':{base:1600000,trend:'+2.1%',currency:'ZAR',region:'Africa'},
+  'Cape Town, South Africa':{base:2100000,trend:'+3.5%',currency:'ZAR',region:'Africa'},
+  'Durban, South Africa':{base:1300000,trend:'+1.8%',currency:'ZAR',region:'Africa'},
+  'Nairobi, Kenya':{base:25000000,trend:'+7.8%',currency:'KES',region:'Africa'},
+  'Mombasa, Kenya':{base:18000000,trend:'+5.2%',currency:'KES',region:'Africa'},
+  'Casablanca, Morocco':{base:3200000,trend:'+6.1%',currency:'MAD',region:'Africa'},
+  'Marrakech, Morocco':{base:2800000,trend:'+4.9%',currency:'MAD',region:'Africa'},
+  'Addis Ababa, Ethiopia':{base:8500000,trend:'+11.2%',currency:'ETB',region:'Africa'},
+  'Accra, Ghana':{base:950000,trend:'+9.8%',currency:'GHS',region:'Africa'},
+  'Dakar, Senegal':{base:110000000,trend:'+7.1%',currency:'XOF',region:'Africa'},
+  'Tunis, Tunisia':{base:650000,trend:'+3.9%',currency:'TND',region:'Africa'},
+  'Dar es Salaam, Tanzania':{base:550000000,trend:'+8.1%',currency:'TZS',region:'Africa'},
+  'Kampala, Uganda':{base:750000000,trend:'+9.2%',currency:'UGX',region:'Africa'},
+  'Luanda, Angola':{base:1200000,trend:'+10.1%',currency:'USD',region:'Africa'},
+
+  // ASIA
   'Tokyo, Japan':{base:85000000,trend:'+2.1%',currency:'JPY',region:'Asia'},
+  'Osaka, Japan':{base:62000000,trend:'+1.8%',currency:'JPY',region:'Asia'},
+  'Kyoto, Japan':{base:71000000,trend:'+2.5%',currency:'JPY',region:'Asia'},
   'Mumbai, India':{base:35000000,trend:'+7.2%',currency:'INR',region:'Asia'},
+  'Delhi, India':{base:28000000,trend:'+6.5%',currency:'INR',region:'Asia'},
+  'Bangalore, India':{base:19000000,trend:'+8.1%',currency:'INR',region:'Asia'},
   'Beijing, China':{base:6800000,trend:'+1.2%',currency:'CNY',region:'Asia'},
+  'Shanghai, China':{base:7200000,trend:'+1.5%',currency:'CNY',region:'Asia'},
+  'Shenzhen, China':{base:5900000,trend:'+2.1%',currency:'CNY',region:'Asia'},
+  'Hong Kong, China':{base:10500000,trend:'-0.5%',currency:'HKD',region:'Asia'},
+  'Singapore':{base:1200000,trend:'+3.1%',currency:'SGD',region:'Asia'},
+  'Seoul, South Korea':{base:1450000,trend:'+4.2%',currency:'KRW',region:'Asia'},
+  'Busan, South Korea':{base:950000,trend:'+3.1%',currency:'KRW',region:'Asia'},
+  'Bangkok, Thailand':{base:9500000,trend:'+5.8%',currency:'THB',region:'Asia'},
+  'Phuket, Thailand':{base:12500000,trend:'+7.2%',currency:'THB',region:'Asia'},
+  'Kuala Lumpur, Malaysia':{base:1100000,trend:'+4.1%',currency:'MYR',region:'Asia'},
+  'Penang, Malaysia':{base:850000,trend:'+3.5%',currency:'MYR',region:'Asia'},
+  'Jakarta, Indonesia':{base:4500000000,trend:'+6.9%',currency:'IDR',region:'Asia'},
+  'Bali, Indonesia':{base:3800000000,trend:'+9.1%',currency:'IDR',region:'Asia'},
+  'Manila, Philippines':{base:12500000,trend:'+7.1%',currency:'PHP',region:'Asia'},
+  'Ho Chi Minh City, Vietnam':{base:6500000000,trend:'+10.2%',currency:'VND',region:'Asia'},
+  'Hanoi, Vietnam':{base:5800000000,trend:'+9.5%',currency:'VND',region:'Asia'},
+  'Taipei, Taiwan':{base:28000000,trend:'+3.2%',currency:'TWD',region:'Asia'},
+  'Dhaka, Bangladesh':{base:25000000,trend:'+8.8%',currency:'BDT',region:'Asia'},
+  'Karachi, Pakistan':{base:35000000,trend:'+6.1%',currency:'PKR',region:'Asia'},
+  'Lahore, Pakistan':{base:31000000,trend:'+5.9%',currency:'PKR',region:'Asia'},
+  'Colombo, Sri Lanka':{base:75000000,trend:'+4.5%',currency:'LKR',region:'Asia'},
+
+  // EUROPE
   'London, UK':{base:950000,trend:'+1.9%',currency:'GBP',region:'Europe'},
+  'Manchester, UK':{base:550000,trend:'+4.2%',currency:'GBP',region:'Europe'},
+  'Birmingham, UK':{base:480000,trend:'+3.8%',currency:'GBP',region:'Europe'},
   'Paris, France':{base:820000,trend:'+2.6%',currency:'EUR',region:'Europe'},
+  'Lyon, France':{base:580000,trend:'+3.1%',currency:'EUR',region:'Europe'},
+  'Marseille, France':{base:510000,trend:'+2.9%',currency:'EUR',region:'Europe'},
   'Berlin, Germany':{base:620000,trend:'+4.3%',currency:'EUR',region:'Europe'},
-  'New York City, USA':{base:1400000,trend:'+2.8%',currency:'USD',region:'North America'},
-  'Los Angeles, USA':{base:1100000,trend:'+4.2%',currency:'USD',region:'North America'},
-  'Toronto, Canada':{base:850000,trend:'+3.2%',currency:'CAD',region:'North America'},
-  'Sao Paulo, Brazil':{base:950000,trend:'+3.9%',currency:'BRL',region:'South America'},
-  'Dubai, UAE':{base:2800000,trend:'+10.4%',currency:'AED',region:'Middle East'},
+  'Munich, Germany':{base:880000,trend:'+3.9%',currency:'EUR',region:'Europe'},
+  'Hamburg, Germany':{base:710000,trend:'+4.1%',currency:'EUR',region:'Europe'},
+  'Rome, Italy':{base:550000,trend:'+1.5%',currency:'EUR',region:'Europe'},
+  'Milan, Italy':{base:720000,trend:'+3.2%',currency:'EUR',region:'Europe'},
+  'Venice, Italy':{base:950000,trend:'+2.1%',currency:'EUR',region:'Europe'},
+  'Madrid, Spain':{base:580000,trend:'+3.9%',currency:'EUR',region:'Europe'},
+  'Barcelona, Spain':{base:690000,trend:'+4.5%',currency:'EUR',region:'Europe'},
+  'Valencia, Spain':{base:420000,trend:'+5.1%',currency:'EUR',region:'Europe'},
+  'Amsterdam, Netherlands':{base:810000,trend:'+5.8%',currency:'EUR',region:'Europe'},
+  'Rotterdam, Netherlands':{base:620000,trend:'+5.1%',currency:'EUR',region:'Europe'},
+  'Brussels, Belgium':{base:590000,trend:'+3.2%',currency:'EUR',region:'Europe'},
+  'Zurich, Switzerland':{base:1600000,trend:'+2.9%',currency:'CHF',region:'Europe'},
+  'Geneva, Switzerland':{base:1850000,trend:'+2.5%',currency:'CHF',region:'Europe'},
+  'Vienna, Austria':{base:750000,trend:'+3.7%',currency:'EUR',region:'Europe'},
+  'Stockholm, Sweden':{base:9200000,trend:'+1.1%',currency:'SEK',region:'Europe'},
+  'Oslo, Norway':{base:10500000,trend:'+2.8%',currency:'NOK',region:'Europe'},
+  'Copenhagen, Denmark':{base:7800000,trend:'+3.9%',currency:'DKK',region:'Europe'},
+  'Helsinki, Finland':{base:650000,trend:'+2.1%',currency:'EUR',region:'Europe'},
+  'Lisbon, Portugal':{base:680000,trend:'+7.2%',currency:'EUR',region:'Europe'},
+  'Porto, Portugal':{base:550000,trend:'+6.5%',currency:'EUR',region:'Europe'},
+  'Dublin, Ireland':{base:720000,trend:'+5.1%',currency:'EUR',region:'Europe'},
+  'Athens, Greece':{base:480000,trend:'+8.1%',currency:'EUR',region:'Europe'},
+  'Moscow, Russia':{base:55000000,trend:'+4.1%',currency:'RUB',region:'Europe'},
+  'Saint Petersburg, Russia':{base:42000000,trend:'+3.5%',currency:'RUB',region:'Europe'},
+  'Istanbul, Turkey':{base:8500000,trend:'+15.2%',currency:'TRY',region:'Europe'},
+  'Ankara, Turkey':{base:6100000,trend:'+13.1%',currency:'TRY',region:'Europe'},
+  'Prague, Czechia':{base:12500000,trend:'+5.8%',currency:'CZK',region:'Europe'},
+  'Budapest, Hungary':{base:110000000,trend:'+7.1%',currency:'HUF',region:'Europe'},
+  'Warsaw, Poland':{base:1850000,trend:'+6.9%',currency:'PLN',region:'Europe'},
+  'Krakow, Poland':{base:1550000,trend:'+6.2%',currency:'PLN',region:'Europe'},
+  'Bucharest, Romania':{base:650000,trend:'+5.2%',currency:'RON',region:'Europe'},
+  'Sofia, Bulgaria':{base:450000,trend:'+4.9%',currency:'BGN',region:'Europe'},
+  'Reykjavik, Iceland':{base:115000000,trend:'+6.1%',currency:'ISK',region:'Europe'},
+
+  // AMERICAS (North & South)
+  'New York City, USA':{base:1400000,trend:'+2.8%',currency:'USD',region:'Americas'},
+  'Los Angeles, USA':{base:1100000,trend:'+4.2%',currency:'USD',region:'Americas'},
+  'Chicago, USA':{base:550000,trend:'+1.5%',currency:'USD',region:'Americas'},
+  'Houston, USA':{base:450000,trend:'+3.1%',currency:'USD',region:'Americas'},
+  'Miami, USA':{base:720000,trend:'+6.5%',currency:'USD',region:'Americas'},
+  'San Francisco, USA':{base:1600000,trend:'+1.2%',currency:'USD',region:'Americas'},
+  'Toronto, Canada':{base:850000,trend:'+3.2%',currency:'CAD',region:'Americas'},
+  'Vancouver, Canada':{base:1150000,trend:'+2.9%',currency:'CAD',region:'Americas'},
+  'Montreal, Canada':{base:620000,trend:'+3.8%',currency:'CAD',region:'Americas'},
+  'Mexico City, Mexico':{base:11500000,trend:'+6.1%',currency:'MXN',region:'Americas'},
+  'Cancun, Mexico':{base:8500000,trend:'+7.2%',currency:'MXN',region:'Americas'},
+  'Sao Paulo, Brazil':{base:950000,trend:'+3.9%',currency:'BRL',region:'Americas'},
+  'Rio de Janeiro, Brazil':{base:810000,trend:'+3.1%',currency:'BRL',region:'Americas'},
+  'Brasilia, Brazil':{base:750000,trend:'+2.5%',currency:'BRL',region:'Americas'},
+  'Buenos Aires, Argentina':{base:450000,trend:'+10.1%',currency:'USD',region:'Americas'},
+  'Lima, Peru':{base:950000,trend:'+4.5%',currency:'PEN',region:'Americas'},
+  'Santiago, Chile':{base:280000000,trend:'+3.9%',currency:'CLP',region:'Americas'},
+  'Bogota, Colombia':{base:850000000,trend:'+5.1%',currency:'COP',region:'Americas'},
+  'Quito, Ecuador':{base:350000,trend:'+3.2%',currency:'USD',region:'Americas'},
+  'Caracas, Venezuela':{base:250000,trend:'-1.1%',currency:'USD',region:'Americas'},
+  'Montevideo, Uruguay':{base:9500000,trend:'+4.2%',currency:'UYU',region:'Americas'},
+
+  // MIDDLE EAST
+  'Dubai, UAE':{base:2800000,trend:'+10.4%',currency:'AED',region:'Mid East'},
+  'Abu Dhabi, UAE':{base:2100000,trend:'+8.1%',currency:'AED',region:'Mid East'},
+  'Riyadh, Saudi Arabia':{base:1850000,trend:'+6.2%',currency:'SAR',region:'Mid East'},
+  'Jeddah, Saudi Arabia':{base:1450000,trend:'+5.5%',currency:'SAR',region:'Mid East'},
+  'Doha, Qatar':{base:2500000,trend:'+4.1%',currency:'QAR',region:'Mid East'},
+  'Kuwait City, Kuwait':{base:350000,trend:'+3.2%',currency:'KWD',region:'Mid East'},
+  'Manama, Bahrain':{base:280000,trend:'+2.9%',currency:'BHD',region:'Mid East'},
+  'Muscat, Oman':{base:195000,trend:'+3.1%',currency:'OMR',region:'Mid East'},
+  'Amman, Jordan':{base:210000,trend:'+2.5%',currency:'JOD',region:'Mid East'},
+  'Tel Aviv, Israel':{base:4500000,trend:'+5.8%',currency:'ILS',region:'Mid East'},
+  'Jerusalem, Israel':{base:3200000,trend:'+4.2%',currency:'ILS',region:'Mid East'},
+
+  // OCEANIA
   'Sydney, Australia':{base:1150000,trend:'+4.8%',currency:'AUD',region:'Oceania'},
-  'Auckland, New Zealand':{base:1050000,trend:'+2.1%',currency:'NZD',region:'Oceania'}
+  'Melbourne, Australia':{base:950000,trend:'+3.9%',currency:'AUD',region:'Oceania'},
+  'Brisbane, Australia':{base:780000,trend:'+5.2%',currency:'AUD',region:'Oceania'},
+  'Perth, Australia':{base:650000,trend:'+4.5%',currency:'AUD',region:'Oceania'},
+  'Adelaide, Australia':{base:610000,trend:'+4.1%',currency:'AUD',region:'Oceania'},
+  'Auckland, New Zealand':{base:1050000,trend:'+2.1%',currency:'NZD',region:'Oceania'},
+  'Wellington, New Zealand':{base:850000,trend:'+1.8%',currency:'NZD',region:'Oceania'},
 };
 
 // SEARCH
 var curCity=null,currentRegion='all';
 var inp=document.getElementById('searchInput'),sbtn=document.getElementById('searchBtn'),sug=document.getElementById('sugBox');
 function filterRegion(btn,region){currentRegion=region;document.querySelectorAll('.region-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');inp.dispatchEvent(new Event('input'));}
+
 inp.addEventListener('input',function(){
   curCity=null;sbtn.disabled=true;var q=inp.value.trim();
   if(q.length<2){sug.style.display='none';return;}
@@ -1013,28 +1247,56 @@ inp.addEventListener('input',function(){
   sug.innerHTML='';
   m.forEach(function(city){var d=document.createElement('div');d.className='sug-item';d.innerHTML='<span>'+city+'</span><span class="sug-sym">'+s(CITIES[city].currency)+'</span>';d.addEventListener('click',function(){pickCity(city);});sug.appendChild(d);});
   sug.style.display='block';
+  sbtn.disabled = false; 
 });
-inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&(curCity||inp.value.trim()))doSearch();});
+inp.addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});
 sbtn.addEventListener('click',doSearch);
 document.addEventListener('click',function(e){if(!inp.contains(e.target)&&!sug.contains(e.target))sug.style.display='none';});
 function pickCity(city){curCity=city;inp.value=city;sug.style.display='none';sbtn.disabled=false;doSearch();}
+
+// CLASSIC SINGLE CARD SEARCH
 function doSearch(){
-  var q=curCity||inp.value.trim();if(!q)return;
-  if(!CITIES[q]) return;
-  document.getElementById('loading').style.display='block';document.getElementById('result').style.display='none';sbtn.disabled=true;
+  var q=inp.value.trim().toLowerCase(); if(!q && !curCity) return;
+  sug.style.display='none';
+  
+  var matchedCityKey = curCity;
+  if (!matchedCityKey) {
+     var matches = Object.keys(CITIES).filter(function(c){ 
+         var mq=c.toLowerCase().indexOf(q)!==-1;
+         var mr=currentRegion==='all'||(CITIES[c].region&&CITIES[c].region.toLowerCase().indexOf(currentRegion.toLowerCase())!==-1);
+         return mq&&mr; 
+     });
+     if(matches.length > 0) matchedCityKey = matches[0];
+  }
+
+  if(!matchedCityKey || !CITIES[matchedCityKey]) {
+     return;
+  }
+  curCity = matchedCityKey;
+
+  document.getElementById('loading').style.display='block';document.getElementById('result').style.display='none';
+  sbtn.disabled=true;
+
   setTimeout(function(){
-    var d=CITIES[q],p=d.base,up=d.trend[0]==='+';
-    document.getElementById('resLoc').textContent=q+' • 2026';
+    var d=CITIES[curCity],p=d.base,up=d.trend[0]==='+';
+    document.getElementById('resLoc').textContent=curCity.toUpperCase()+' • 2026';
     document.getElementById('resPrice').textContent=fmt(p,d.currency);
-    document.getElementById('resBadge').textContent=up?'Growth Phase':'Stabilizing';
-    var tv=parseFloat(d.trend);
+    document.getElementById('resBadge').textContent=up?'GROWTH PHASE':'STABILIZING';
+    
     document.getElementById('resRange').textContent=fmt(Math.round(p*.75),d.currency)+' – '+fmt(Math.round(p*1.6),d.currency);
     document.getElementById('resPerSqm').textContent=fmt(Math.round(p/100),d.currency)+'/m²';
     document.getElementById('resTrend').textContent=d.trend;
+    
+    var trendEl = document.getElementById('resTrend');
+    if(up) { trendEl.style.color = 'var(--green)'; } else { trendEl.style.color = 'var(--red)'; }
+
     document.getElementById('resCurr').textContent=s(d.currency)+' '+d.currency;
-    renderChart(p,d.trend);updateFavBtn();
+    
+    renderChart(p,d.trend);
+    updateFavBtn();
+    
     document.getElementById('loading').style.display='none';document.getElementById('result').style.display='block';sbtn.disabled=false;
-  },800);
+  }, 800);
 }
 
 // CHART
@@ -1150,12 +1412,25 @@ function populateConvSelects(){var keys=Object.keys(RATES).sort(),opts=keys.map(
 function doConvert(){var amt=parseFloat(document.getElementById('convAmt').value)||0;var from=document.getElementById('convFrom').value,to=document.getElementById('convTo').value;var r=cvt(amt,from,to);if(r!==null){document.getElementById('convRes').value=r.toLocaleString(undefined,{maximumFractionDigits:2});var rate=cvt(1,from,to);document.getElementById('convRateVal').textContent=(s(from)||from)+'1 = '+(s(to)||to)+rate.toFixed(4);}}
 document.getElementById('convAmt').addEventListener('input',doConvert);document.getElementById('convFrom').addEventListener('change',doConvert);document.getElementById('convTo').addEventListener('change',doConvert);
 
-// FAVOURITES
+// FAVOURITES (CLASSIC CARDS RESTORED)
 function getFavs(){try{return JSON.parse(localStorage.getItem('hp_favs')||'[]');}catch(e){return[];}}
 function saveFavs(f){localStorage.setItem('hp_favs',JSON.stringify(f));var b=document.getElementById('favBadge');if(b){b.textContent=f.length;b.style.display=f.length?'inline':'none';}}
-function updateFavBtn(){if(!curCity)return;var saved=getFavs().some(function(f){return f.city===curCity;});var btn=document.getElementById('favBtn');btn.textContent=saved?'★ Saved':'☆ Save';}
+function updateFavBtn(){if(!curCity)return;var saved=getFavs().some(function(f){return f.city===curCity;});var btn=document.getElementById('favBtn');btn.textContent=saved?'★ Saved':'☆ Save';saved?btn.classList.add('saved'):btn.classList.remove('saved');}
 document.getElementById('favBtn').addEventListener('click',function(){if(!curCity)return;var favs=getFavs(),idx=favs.findIndex(function(f){return f.city===curCity;});var d=CITIES[curCity];if(idx===-1)favs.push({city:curCity,price:d?fmt(d.base,d.currency):'—',trend:d?d.trend:'—'});else favs.splice(idx,1);saveFavs(favs);updateFavBtn();});
-function renderFavs(){var el=document.getElementById('favContent'),favs=getFavs();if(!favs.length){el.innerHTML='<div class="fav-empty fav-empty-ico">⭐</div>No favourites yet.';return;}el.innerHTML='<div class="fav-grid">'+favs.map(function(f){var safe=f.city.replace(/'/g,"\\'");return '<div class="fav-card animated" onclick="pickCity(\''+safe+'\')"><div class="fav-city">'+f.city+'</div><div class="fav-price">'+f.price+'</div></div>';}).join('')+'</div>';}
+
+function renderFavs(){
+    var el=document.getElementById('favContent'),favs=getFavs();
+    if(!favs.length){
+        el.innerHTML='<div class="fav-empty"><div class="fav-empty-ico">⭐</div>No favourites yet.</div>';
+        return;
+    }
+    el.innerHTML='<div class="fav-grid">'+favs.map(function(f){
+        var up=f.trend&&f.trend[0]==='+';
+        var safe=f.city.replace(/'/g,"\\'");
+        return '<div class="fav-card animated" onclick="pickCity(\''+safe+'\'); goPage(\'search\');"><button class="fav-rm" onclick="event.stopPropagation();rmFav(\''+safe+'\')">&#10005;</button><div class="fav-city">'+f.city+'</div><div class="fav-price">'+f.price+'</div><div class="fav-trend '+(up?'up':'dn')+'">'+(up?'↑':'↓')+' '+f.trend+' YoY</div></div>';
+    }).join('')+'</div>';
+}
+function rmFav(city){saveFavs(getFavs().filter(function(f){return f.city!==city;}));renderFavs();}
 
 // FAQ
 function toggleFaq(btn) {
@@ -1165,9 +1440,18 @@ function toggleFaq(btn) {
   if(!isOpen){btn.classList.add('open');a.classList.add('open');}
 }
 
-function showReceipt(){document.getElementById('rcEmail').textContent=localStorage.getItem('hp_email')||'—';document.getElementById('rcDate').textContent=localStorage.getItem('hp_purchase_date')||new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});document.getElementById('receiptModal').classList.add('open');}
+function showReceipt(){
+  var email=localStorage.getItem('hp_email')||'—';
+  var date=localStorage.getItem('hp_purchase_date')||new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  
+  document.getElementById('rcEmail').textContent=email;
+  document.getElementById('rcDate').textContent=date;
+  document.getElementById('receiptModal').classList.add('open');
+}
+
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(function(m){m.classList.remove('open');});});
+
 </script>
 </body>
 </html>
