@@ -1744,6 +1744,27 @@ function saveAccountProfile() {
 }
 
 // ── REAL GOOGLE OAUTH FLOW ──────────────────────────────
+// 1. Generate the raw, unhashed nonce
+var currentRawNonce = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+// 2. Manually render the buttons and give Google the HASHED nonce
+window.addEventListener('load', async function() {
+    var hashedNonce = typeof sha256 === 'function' ? sha256(currentRawNonce) : currentRawNonce;
+    
+    google.accounts.id.initialize({
+        client_id: "1068043051474-dshhijndatapqvjlckg456ntjtndnn1c.apps.googleusercontent.com",
+        callback: handleGoogleLogin,
+        nonce: hashedNonce // Google gets the hash
+    });
+    
+    var signinDivs = document.querySelectorAll('.g_id_signin');
+    signinDivs.forEach(function(div) {
+        google.accounts.id.renderButton(div, { 
+            theme: "filled_black", size: "large", type: "standard", shape: "rectangular", text: "continue_with", logo_alignment: "left", width: "100%" 
+        });
+    });
+});
+
 function parseJwt(token) {
     try {
         var base64Url = token.split('.')[1];
@@ -1752,15 +1773,9 @@ function parseJwt(token) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
         return JSON.parse(jsonPayload);
-    } catch(e) { return null; }
-}
-
-function triggerGoogleLogin() {
-    google.accounts.id.initialize({
-        client_id: "1068043051474-dshhijndatapqvjlckg456ntjtndnn1c.apps.googleusercontent.com",
-        callback: handleGoogleLogin
-    });
-    google.accounts.id.prompt(); 
+    } catch(e) {
+        return null;
+    }
 }
 
 async function handleGoogleLogin(response) {
@@ -1775,13 +1790,14 @@ async function handleGoogleLogin(response) {
         var err = document.getElementById('loginErr') || document.getElementById('signupErr');
         if(err) { err.style.color = 'var(--text)'; err.textContent = 'Verifying account with database...'; }
 
-      // Exchange Google token for Supabase Session
+        // Exchange Google token for Supabase Session
         var authRes = await supaFetch('/auth/v1/token?grant_type=id_token', 'POST', {
             provider: 'google',
             id_token: response.credential,
-            nonce: decoded.nonce
+            nonce: currentRawNonce // Supabase gets the raw string!
         });
-        if(!authRes.ok) throw new Error(authRes.error || 'Google auth failed.');
+        
+        if(!authRes.ok) throw new Error('Google auth failed in Supabase: ' + authRes.error);
         
         localStorage.setItem('hp_access_token', authRes.data.access_token);
         
@@ -1789,32 +1805,48 @@ async function handleGoogleLogin(response) {
         
         if (check.ok && check.data && check.data.length > 0) {
             var user = check.data[0];
+            
             if (user.paid) {
                 localStorage.setItem('hp_email', email);
                 localStorage.setItem('hp_authed', '1');
+                
                 if(!localStorage.getItem('hp_username') && fullName) localStorage.setItem('hp_username', fullName);
                 if(!localStorage.getItem('hp_avatar') && avatarUrl) localStorage.setItem('hp_avatar', avatarUrl);
-                if(user.created_at) localStorage.setItem('hp_purchase_date', new Date(user.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}));
-                unlockDashboard();
+                if(user.created_at) {
+                    localStorage.setItem('hp_purchase_date', new Date(user.created_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}));
+                }
+                
+                var wrap = document.getElementById('authWrap');
+                wrap.style.opacity = '0';
+                setTimeout(function() {
+                    unlockDashboard();
+                    wrap.style.opacity = '1'; 
+                }, 600);
             } else {
                 localStorage.setItem('hp_pending_email', email);
                 window.location.href = 'https://buy.stripe.com/9B69AS4XR2Mt3lz5abcfK01';
             }
         } else {
-            await supaFetch('/rest/v1/users', 'POST', { email: email, password_hash: 'google_oauth_user', paid: false, user_data: {} });
+            await supaFetch('/rest/v1/users', 'POST', {
+                email: email, 
+                password_hash: 'google_oauth_user',
+                paid: false,
+                user_data: {}
+            });
             localStorage.setItem('hp_pending_email', email);
             window.location.href = 'https://buy.stripe.com/9B69AS4XR2Mt3lz5abcfK01';
         }
     } catch (error) {
+        console.error("Google Auth Error:", error);
         var errBox = document.getElementById('loginErr') || document.getElementById('signupErr');
-        if(errBox) { errBox.style.color = 'var(--red)'; errBox.textContent = 'Google login failed: ' + error.message; }
+        if(errBox) { errBox.style.color = 'var(--red)'; errBox.textContent = 'Google sign-in failed. Please try again.'; }
     }
 }
 
 function doMicrosoftLogin() {
     alert("Microsoft Authentication is currently undergoing maintenance. Please use Google or Email.");
 }
-
+  
 // ── PASSWORD VERIFICATION SYSTEM ──────────────────────────────
 var _pwAction = ''; 
 var _pwVerifyCode = '';
