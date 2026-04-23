@@ -1781,10 +1781,11 @@ async function handleGoogleLogin(response) {
         var err = document.getElementById('loginErr') || document.getElementById('signupErr');
         if(err) { err.style.color = 'var(--text)'; err.textContent = 'Verifying account with database...'; }
 
-        // Secure Login / Exchange Google token for Supabase Session
+      // Exchange Google token for Supabase Session
         var authRes = await supaFetch('/auth/v1/token?grant_type=id_token', 'POST', {
             provider: 'google',
-            id_token: response.credential
+            id_token: response.credential,
+            nonce: decoded.nonce
         });
         if(!authRes.ok) throw new Error(authRes.error || 'Google auth failed.');
         
